@@ -1,0 +1,31 @@
+{
+    "name": "urbanetter/jassy",
+    "description": "A library with some AI for a Swiss card game called Jass",
+    "type": "project",
+    "require-dev": {
+        "phpunit/phpunit": "^6.3"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Urban Etter",
+            "email": "uetter@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Jass\\": "src/"
+        },
+        "files": [
+            "src/CardSetFunctions.php",
+            "src/HandFunctions.php",
+            "src/TrickFunctions.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "require": {}
+}
