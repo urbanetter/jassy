@@ -15,7 +15,6 @@ class DumbTest extends TestCase
     function testDumbStrategy()
     {
         $ueli = new Player();
-        $ueli->strategies = ["Dumb"];
         $style = new TopDown();
 
         $ueli->hand = [
