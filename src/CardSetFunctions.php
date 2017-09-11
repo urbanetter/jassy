@@ -45,3 +45,14 @@ function isValidCard(Card $card)
 {
     return (in_array($card->suit, suits()) && in_array($card->value, values()));
 }
+
+function byShortcuts($string)
+{
+    $cards = explode(",", $string);
+    $result = [];
+    foreach ($cards as $card) {
+        $result[] = Card::shortcut($card);
+
+    }
+    return $result;
+}
