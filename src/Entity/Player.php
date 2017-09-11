@@ -26,12 +26,7 @@ class Player
     public $brain;
 
     /**
-     * @var Ability[]
-     */
-    public $abilities;
-
-    /**
-     * @var Strategy[]
+     * @var string[]
      */
     public $strategies;
 
