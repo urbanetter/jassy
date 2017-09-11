@@ -19,7 +19,8 @@
         "files": [
             "src/CardSetFunctions.php",
             "src/HandFunctions.php",
-            "src/TrickFunctions.php"
+            "src/TrickFunctions.php",
+            "src/GameFunctions.php"
         ]
     },
     "autoload-dev": {

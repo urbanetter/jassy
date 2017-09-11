@@ -7,8 +7,8 @@ use Jass\Style\Style;
 
 class Game
 {
-    const NUMBER_OF_TRICKS = 9;
     const NUMBER_OF_CARDS = 9;
+    const NUMBER_OF_PLAYERS = 4;
 
     /**
      * @var Player[]

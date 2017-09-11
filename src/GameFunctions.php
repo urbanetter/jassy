@@ -8,7 +8,7 @@ use Jass\Style\Style;
 
 function isFinished(Game $game)
 {
-    return count($game->playedTricks) == Game::NUMBER_OF_TRICKS;
+    return count($game->playedTricks) == Game::NUMBER_OF_CARDS;
 }
 
 function hasStarted(Game $game)
@@ -20,7 +20,7 @@ function isReady(Game $game)
 {
     return
         $game->players
-        && count($game->players) == 4
+        && count($game->players) == Game::NUMBER_OF_PLAYERS
         && $game->players[3] instanceof Player
         && $game->style
         && $game->style instanceof Style

@@ -7,7 +7,7 @@ use function Jass\CardSet\values;
 use Jass\Entity\Card;
 use Jass\Entity\Card\Suit;
 use Jass\Entity\Card\Value;
-use Jass\GameStyle\TopDown;
+use Jass\Style\TopDown;
 use function Jass\Hand\highest;
 use function Jass\Hand\lowest;
 use function Jass\Hand\potential;
