@@ -20,7 +20,8 @@
             "src/CardSetFunctions.php",
             "src/HandFunctions.php",
             "src/TrickFunctions.php",
-            "src/GameFunctions.php"
+            "src/GameFunctions.php",
+            "src/PlayerFunctions.php"
         ]
     },
     "autoload-dev": {

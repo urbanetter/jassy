@@ -4,8 +4,8 @@ namespace Jass\Trick;
 
 use Jass\Entity\Card;
 use Jass\Entity\Trick;
-use Jass\Hand;
-use Jass\Table;
+use Jass\Entity\Turn;
+use Jass\CardSet;
 
 function isFinished(Trick $trick, $players)
 {
@@ -48,3 +48,16 @@ function points(Trick $trick, $pointFunction)
     }, 0);
 }
 
+function byShortcuts($players, $cards)
+{
+    $result = new Trick();
+    $cards = CardSet\byShortcuts($cards);
+    foreach ($players as $player) {
+        $turn = new Turn();
+        $turn->player = $player;
+        $turn->card = array_shift($cards);
+        $result->turns[] = $turn;
+    }
+    $result->leadingSuit = $result->turns[0]->card->suit;
+    return $result;
+}

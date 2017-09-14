@@ -4,6 +4,10 @@ namespace Jass\Style;
 
 use Jass\Entity\Card;
 use Jass\Entity\Card\Value;
+use Jass\Entity\Trick;
+use function Jass\Hand\highest;
+use function Jass\Hand\suit;
+use function Jass\Trick\playedCards;
 
 class Trump extends TopDown
 {
@@ -58,5 +62,23 @@ class Trump extends TopDown
     {
         return $this->trumpSuit . " Trumpf";
     }
+
+    public function isValidCard(Trick $trick, $hand, Card $card)
+    {
+        if ($card->suit == $this->trumpSuit) {
+            $playedTrumpCards = suit(playedCards($trick), $this->trumpSuit);
+            if ($playedTrumpCards) {
+                $highest = highest($playedTrumpCards, $this->orderFunction());
+                if ($this->orderValue($highest) > $this->orderValue(($card))) {
+                    // under trumping is not allowed
+                    return false;
+                }
+            }
+            // its allowed to play trump if its not under trumping
+            return true;
+        }
+        return parent::isValidCard($trick, $hand, $card);
+    }
+
 
 }

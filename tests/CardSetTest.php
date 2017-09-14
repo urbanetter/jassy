@@ -18,9 +18,11 @@ class CardSetTest extends TestCase
             Card::from(Card\Suit::BELL, Card\Value::KING),
             Card::from(Card\Suit::BELL, Card\Value::JACK),
             Card::from(Card\Suit::OAK, Card\Value::SEVEN),
+            Card::from(Card\Suit::SHIELD, Card\Value::TEN),
+            Card::from(Card\Suit::SHIELD, Card\Value::ACE),
         ];
 
-        $cards = byShortcuts("ra, rk, rq, bk, bj, o7");
+        $cards = byShortcuts("ra, rk, rq, bk, bj, o7, s10, sa");
 
         $this->assertEquals($expected, $cards);
     }
