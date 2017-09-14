@@ -4,9 +4,9 @@ namespace Tests\Style;
 
 use Jass\Entity\Card;
 use Jass\Entity\Trick;
-use Jass\Entity\Turn;
 use function Jass\Player\byNames;
 use Jass\Style\TopDown;
+use function Jass\Trick\addTurn;
 use PHPUnit\Framework\TestCase;
 
 class TopDownTest extends TestCase
@@ -44,11 +44,8 @@ class TopDownTest extends TestCase
         $trick = new Trick();
         $this->assertTrue($sut->isValidCard($trick, $hand, Card::shortcut('ra')));
 
-        $trick->turns[] = new Turn($players[0], Card::shortcut('ba'));
-        $trick->leadingSuit = Card\Suit::BELL;
+        addTurn($trick, $players[0], Card::shortcut('ba'));
 
         $this->assertFalse($sut->isValidCard($trick, $hand, Card::shortcut('ra')));
-
-
     }
 }

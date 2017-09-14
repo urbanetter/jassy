@@ -3,6 +3,7 @@
 namespace Jass\Trick;
 
 use Jass\Entity\Card;
+use Jass\Entity\Player;
 use Jass\Entity\Trick;
 use Jass\Entity\Turn;
 use Jass\CardSet;
@@ -48,16 +49,23 @@ function points(Trick $trick, $pointFunction)
     }, 0);
 }
 
+function addTurn(Trick $trick, Player $player, Card $card)
+{
+    if (count($trick->turns) == 4) {
+        throw new \LogicException('There are already 4 turns for this trick');
+    }
+    $trick->turns[] = new Turn($player, $card);
+    if (!$trick->leadingSuit) {
+        $trick->leadingSuit = $card->suit;
+    }
+}
+
 function byShortcuts($players, $cards)
 {
     $result = new Trick();
     $cards = CardSet\byShortcuts($cards);
     foreach ($players as $player) {
-        $turn = new Turn();
-        $turn->player = $player;
-        $turn->card = array_shift($cards);
-        $result->turns[] = $turn;
+        addTurn($result, $player, array_shift($cards));
     }
-    $result->leadingSuit = $result->turns[0]->card->suit;
     return $result;
 }
