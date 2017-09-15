@@ -24,6 +24,7 @@ class TrumpTest extends TestCase
         $this->assertGreaterThan($sut->orderValue(Card::shortcut('sa')), $sut->orderValue(Card::shortcut('r6')));
 
         // trump cards
+        $this->assertGreaterThan($sut->orderValue(Card::shortcut('rk')), $sut->orderValue(Card::shortcut('ra')));
         $this->assertGreaterThan($sut->orderValue(Card::shortcut('ra')), $sut->orderValue(Card::shortcut('r9')));
         $this->assertGreaterThan($sut->orderValue(Card::shortcut('r9')), $sut->orderValue(Card::shortcut('rj')));
         $this->assertGreaterThan($sut->orderValue(Card::shortcut('ra')), $sut->orderValue(Card::shortcut('rj')));
