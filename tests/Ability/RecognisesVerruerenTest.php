@@ -21,20 +21,20 @@ class RecognisesVerruerenTest extends TestCase
 
         $trick = byShortcuts($players, 'ra, rk, r6, rq');
         RecognisesVerrueren::seeTrick($ueli, $trick, $style);
-        $this->assertEquals(0, count($ueli->brain['verrüert']));
+        $this->assertEquals(0, count($ueli->brain[RecognisesVerrueren::SUITS]));
 
         $trick = byShortcuts($players, 'r7, rk, r6, rq');
         RecognisesVerrueren::seeTrick($ueli, $trick, $style);
-        $this->assertEquals(0, count($ueli->brain['verrüert']));
+        $this->assertEquals(0, count($ueli->brain[RecognisesVerrueren::SUITS]));
 
         $trick = byShortcuts($players, 'ra, rk, b6, rq');
         RecognisesVerrueren::seeTrick($ueli, $trick, $style);
-        $this->assertContains(Suit::BELL, $ueli->brain['verrüert']);
+        $this->assertContains(Suit::BELL, $ueli->brain[RecognisesVerrueren::SUITS]);
 
         $trick = byShortcuts($players, 'ra, rk, s6, rq');
         RecognisesVerrueren::seeTrick($ueli, $trick, $style);
-        $this->assertContains(Suit::BELL, $ueli->brain['verrüert']);
-        $this->assertContains(Suit::SHIELD, $ueli->brain['verrüert']);
+        $this->assertContains(Suit::BELL, $ueli->brain[RecognisesVerrueren::SUITS]);
+        $this->assertContains(Suit::SHIELD, $ueli->brain[RecognisesVerrueren::SUITS]);
 
     }
 }
