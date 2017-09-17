@@ -4,7 +4,11 @@ namespace Jass\Player;
 
 use Jass\Entity\Player;
 
-function byNames($names)
+/**
+ * @param $names
+ * @return Player[]
+ */
+function byNames(string $names)
 {
     $names = explode(',', $names);
     if (!count($names) == 4) {

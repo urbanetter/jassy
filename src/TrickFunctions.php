@@ -54,10 +54,13 @@ function addTurn(Trick $trick, Player $player, Card $card)
     if (count($trick->turns) == 4) {
         throw new \LogicException('There are already 4 turns for this trick');
     }
+
     $trick->turns[] = new Turn($player, $card);
     if (!$trick->leadingSuit) {
         $trick->leadingSuit = $card->suit;
     }
+
+    return $trick;
 }
 
 function byShortcuts($players, $cards)

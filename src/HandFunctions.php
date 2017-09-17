@@ -188,3 +188,24 @@ function suits($hand)
 
     return array_unique($suits);
 }
+
+/**
+ * @param Card[] $hand
+ * @param Card $played
+ * @return Card[]
+ */
+function playCardOfHand($hand, Card $played)
+{
+    $result = [];
+    foreach ($hand as $card) {
+        if ((string) $card != (string) $played) {
+            $result[] = $card;
+        }
+    }
+
+    if (count($hand) == count($result)) {
+        throw new \LogicException('Card ' . $played . ' is not in hand');
+    }
+
+    return $result;
+}

@@ -30,7 +30,7 @@ class IntelligenceTest extends TestCase
         $this->assertEquals($expected, $intelligence->firstCard($ueli, $style));
 
         $trick = new Trick();
-        $intelligence->seeTrick($ueli, $trick);
+        $intelligence->seeTrick($ueli, $trick, $style);
 
         $this->assertArrayHasKey('hello', $ueli->brain);
         $this->assertEquals('world', $ueli->brain['hello']);

@@ -69,10 +69,10 @@ class Intelligence
         return $card;
     }
 
-    public function seeTrick(Player $player, Trick $trick)
+    public function seeTrick(Player $player, Trick $trick, Style $style)
     {
         $entity = md5($player);
-        $this->all($entity, 'abilities', [$player, $trick]);
+        $this->all($entity, 'abilities', [$player, $trick, $style]);
     }
 
     protected function all(string $entity, string $chainName, $args)
