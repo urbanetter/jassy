@@ -12,14 +12,13 @@ class Intelligence
 {
     private $functionChains = [];
 
-    public function registerPlayerIntelligence(Player $player, $strategyNamespace = 'Jass\\Strategy', $abilityNamespace = 'Jass\\Ability')
+    public function registerPlayerIntelligence(Player $player)
     {
         $entity = md5($player);
         $functions = ['firstCardOfTrick', 'card'];
 
         $abilities = [];
-        foreach ($player->strategies as $strategyName) {
-            $className = $strategyNamespace . '\\' . $strategyName;
+        foreach ($player->strategies as $className) {
             if (!class_exists($className)) {
                 throw new \InvalidArgumentException($className . ' is not a valid Strategy');
             }
@@ -35,8 +34,7 @@ class Intelligence
         }
 
         $abilities = array_unique($abilities);
-        foreach ($abilities as $abilityName) {
-            $className = $abilityNamespace . '\\' . $abilityName;
+        foreach ($abilities as $className) {
             if (!class_exists($className)) {
                 throw new \InvalidArgumentException($className . ' is not a valid Ability');
             }

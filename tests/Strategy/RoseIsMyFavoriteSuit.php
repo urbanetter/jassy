@@ -10,6 +10,7 @@ use function Jass\Hand\highest;
 use function Jass\Hand\suit;
 use Jass\Strategy;
 use Jass\Style\Style;
+use Tests\Ability\HelloWorld;
 
 class RoseIsMyFavoriteSuit implements Strategy
 {
@@ -30,6 +31,6 @@ class RoseIsMyFavoriteSuit implements Strategy
 
     public static function abilities()
     {
-        return ['HelloWorld'];
+        return [HelloWorld::class];
     }
 }

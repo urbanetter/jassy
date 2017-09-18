@@ -3,6 +3,7 @@
 namespace Jass\Strategy;
 
 
+use Jass\Ability\KnowsPlayedCards;
 use Jass\Entity\Card;
 use Jass\Entity\Player;
 use Jass\Entity\Trick;
@@ -35,6 +36,6 @@ class Bock implements Strategy
 
     public static function abilities()
     {
-        return ["KnowsPlayedCards"];
+        return [KnowsPlayedCards::class];
     }
 }

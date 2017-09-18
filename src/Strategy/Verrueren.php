@@ -61,6 +61,6 @@ class Verrueren implements Strategy
 
     public static function abilities()
     {
-        return ["RecognisesVerrueren", "KnowsPlayedCards"];
+        return [RecognisesVerrueren::class, KnowsPlayedCards::class];
     }
 }

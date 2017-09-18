@@ -12,6 +12,7 @@ use Jass\Entity\Trick;
 use Jass\Intelligence;
 use Jass\Style\TopDown;
 use PHPUnit\Framework\TestCase;
+use Tests\Strategy\RoseIsMyFavoriteSuit;
 
 class IntelligenceTest extends TestCase
 {
@@ -22,9 +23,9 @@ class IntelligenceTest extends TestCase
 
         $ueli = new Player();
         $ueli->hand = bySuitsAndValues([Suit::ROSE], values());
-        $ueli->strategies = ['RoseIsMyFavoriteSuit'];
+        $ueli->strategies = [RoseIsMyFavoriteSuit::class];
 
-        $intelligence->registerPlayerIntelligence($ueli, 'Tests\\Strategy', 'Tests\\Ability');
+        $intelligence->registerPlayerIntelligence($ueli);
 
         $expected = Card::from(Suit::ROSE, Card\Value::ACE);
         $this->assertEquals($expected, $intelligence->firstCard($ueli, $style));
