@@ -11,6 +11,11 @@ class Game
     const NUMBER_OF_PLAYERS = 4;
 
     /**
+     * @var string
+     */
+    public $name;
+
+    /**
      * @var Player[]
      */
     public $players = [];

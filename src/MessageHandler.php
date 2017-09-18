@@ -61,6 +61,14 @@ class MessageHandler
             $game->style = $message->style;
         }
 
+        if ($message->strategies) {
+            foreach ($game->players as $i => $player) {
+                if (isset($message->strategies[$i])) {
+                    $game->players[$i]->strategies = $message->strategies[$i];
+                }
+            }
+        }
+
         return $game;
     }
 
