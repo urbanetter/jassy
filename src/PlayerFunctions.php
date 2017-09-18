@@ -30,3 +30,8 @@ function byNames(string $names)
 
     return $result;
 }
+
+function isInMyTeam(Player $myself, Player $other)
+{
+    return $myself->team == $other->team;
+}
