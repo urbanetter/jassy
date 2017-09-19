@@ -1,6 +1,6 @@
 {
     "name": "urbanetter/jassy",
-    "description": "A library with some AI for a Swiss card game called JassAn envolving AI for a Swiss card game called Jass",
+    "description": "An evolving AI for a Swiss card game called Jass",
     "type": "library",
     "require-dev": {
         "phpunit/phpunit": "^6.3"
