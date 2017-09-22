@@ -17,7 +17,7 @@ function byNames(string $names)
 
     $result = [];
     foreach ($names as $name) {
-        $result[] = new Player($name);
+        $result[] = new Player(trim($name));
     }
 
     $team1 = $result[0]->name . " + " . $result[2]->name;
