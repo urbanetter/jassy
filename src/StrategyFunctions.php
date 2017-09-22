@@ -3,6 +3,7 @@
 namespace Jass\Strategy;
 
 use Jass\Ability;
+use Jass\Entity\Card;
 use Jass\Entity\Player;
 use Jass\Entity\Trick;
 use Jass\Strategy;
@@ -48,7 +49,7 @@ function abilityClasses($classNames)
     }, $classNames);
 }
 
-function firstCardOfTrick(Player $player, Style $style)
+function firstCardOfTrick(Player $player, Style $style) : Card
 {
     foreach (strategyClasses($player->strategies) as $strategy) {
         if (($card = $strategy->firstCardOfTrick($player, $style)) !== null) {
@@ -58,10 +59,10 @@ function firstCardOfTrick(Player $player, Style $style)
     throw new \LogicException('Could not figure out first card for player ' . $player);
 }
 
-function card(Player $player, Trick $trick, Style $style)
+function card(Player $player, Trick $trick, Style $style) : Card
 {
     foreach (strategyClasses($player->strategies) as $strategy) {
-        if ($card = $strategy->card($player, $trick, $style) !== null) {
+        if (($card = $strategy->card($player, $trick, $style)) !== null) {
             return $card;
         }
     }
