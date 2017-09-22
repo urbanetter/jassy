@@ -2,6 +2,7 @@
 
 namespace Jass\Player;
 
+use Jass\Entity\Game;
 use Jass\Entity\Player;
 
 /**
@@ -34,4 +35,14 @@ function byNames(string $names)
 function isInMyTeam(Player $myself, Player $other)
 {
     return $myself->team == $other->team;
+}
+
+function nextPlayer(Player $player, $players)
+{
+    $index = array_search($player, $players);
+    if ($index == Game::NUMBER_OF_PLAYERS - 1) {
+        return $players[0];
+    } else {
+        return $players[$index + 1];
+    }
 }

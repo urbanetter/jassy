@@ -6,11 +6,13 @@ use Jass\Entity\Game;
 use Jass\Entity\Trick;
 use Jass\Entity\Turn;
 use Jass\Message\Deal;
+use function Jass\Player\nextPlayer;
 use Jass\Style\Style;
 use Jass\Message\Message;
 use Jass\Message\PlayerSetup;
 use Jass\Message\StyleSetup;
 use Jass\Message\Turn as TurnMessage;
+use function Jass\Trick\winner;
 
 
 class MessageHandler
@@ -129,8 +131,11 @@ class MessageHandler
 
         // check if trick is finished
         if (\Jass\Trick\isFinished($trick)) {
+            $game->currentPlayer = winner($trick, $game->style->orderFunction());
             $game->playedTricks[] = $trick;
             $game->currentTrick = null;
+        } else {
+            $game->currentPlayer = nextPlayer($game->currentPlayer, $game->players);
         }
 
         return $game;
