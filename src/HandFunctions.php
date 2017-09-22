@@ -172,12 +172,12 @@ function worstSuit($playedCards, $hand, $orderFunction)
 
 function first($array)
 {
-    return array_slice($array, 0, 1)[0];
+    return ($array && is_array($array)) ? array_slice($array, 0, 1)[0] : null;
 }
 
 function last($array)
 {
-    return array_slice($array, -1)[0];
+    return ($array && is_array($array)) ? array_slice($array, -1)[0] : null;
 }
 
 function suits($hand)
