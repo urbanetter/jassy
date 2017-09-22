@@ -9,7 +9,7 @@ use Jass\Entity\Trick;
 use function Jass\Hand\highest;
 use function Jass\Hand\suit;
 use Jass\Strategy;
-use Jass\Style\Style;
+use Jass\Style;
 use Tests\Ability\HelloWorld;
 
 class RoseIsMyFavoriteSuit implements Strategy

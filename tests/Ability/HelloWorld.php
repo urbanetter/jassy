@@ -6,7 +6,7 @@ namespace Tests\Ability;
 use Jass\Ability;
 use Jass\Entity\Player;
 use Jass\Entity\Trick;
-use Jass\Style\Style;
+use Jass\Style;
 
 class HelloWorld implements Ability
 {
