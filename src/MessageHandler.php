@@ -4,24 +4,25 @@ namespace Jass;
 
 use Jass\Entity\Game;
 use Jass\Entity\Trick;
-use Jass\Entity\Turn;
 use Jass\Message\Deal;
-use function Jass\Player\nextPlayer;
 use Jass\Style\Style;
 use Jass\Message\Message;
 use Jass\Message\PlayerSetup;
 use Jass\Message\StyleSetup;
-use Jass\Message\Turn as TurnMessage;
+use Jass\Message\Turn;
+use function Jass\Player\nextPlayer;
+use function Jass\Strategy\seeTrick;
+use function Jass\Trick\addTurn;
 use function Jass\Trick\winner;
 
 
 class MessageHandler
 {
     private $messages = [
-        'Jass\\Message\\PlayerSetup' => "playerSetup",
-        'Jass\\Message\\StyleSetup' => "styleSetup",
-        'Jass\\Message\\Deal' => "deal",
-        'Jass\\Message\\turn' => "truen",
+        PlayerSetup::class => "playerSetup",
+        StyleSetup::class => "styleSetup",
+        Deal::class => "deal",
+        Turn::class => "turn",
     ];
 
     public function handle(Game $game, Message $message) : Game
@@ -93,7 +94,7 @@ class MessageHandler
         return $game;
     }
 
-    public function turn(Game $game, TurnMessage $turn)
+    public function turn(Game $game, Turn $turn)
     {
         if (!\Jass\Game\isReady($game)) {
             throw new \LogicException('Game is not ready to get stared.');
@@ -120,17 +121,13 @@ class MessageHandler
         unset($player->hand[$index]);
 
         // add turn to trick
-        $turn = new Turn();
-        $turn->player = $player;
-        $turn->card = $card;
-
-        if (!$trick->turns) {
-            $trick->leadingSuit = $card->suit;
-        }
-        $trick->turns[] = $turn;
+        $trick = addTurn($trick, $player, $card);
 
         // check if trick is finished
         if (\Jass\Trick\isFinished($trick)) {
+            foreach ($game->players as $player) {
+                seeTrick($player, $trick, $game->style);
+            }
             $game->currentPlayer = winner($trick, $game->style->orderFunction());
             $game->playedTricks[] = $trick;
             $game->currentTrick = null;
