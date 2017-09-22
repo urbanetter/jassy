@@ -3,14 +3,15 @@
 namespace Jass\Trick;
 
 use Jass\Entity\Card;
+use Jass\Entity\Game;
 use Jass\Entity\Player;
 use Jass\Entity\Trick;
 use Jass\Entity\Turn;
 use Jass\CardSet;
 
-function isFinished(Trick $trick, $players)
+function isFinished(Trick $trick)
 {
-    return count($trick->turns) == count($players);
+    return count($trick->turns) == Game::NUMBER_OF_PLAYERS;
 }
 
 function winner(Trick $trick, $valueFunction)

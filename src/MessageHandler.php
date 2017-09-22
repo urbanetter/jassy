@@ -128,7 +128,7 @@ class MessageHandler
         $trick->turns[] = $turn;
 
         // check if trick is finished
-        if (\Jass\Trick\isFinished($trick, $game->players)) {
+        if (\Jass\Trick\isFinished($trick)) {
             $game->playedTricks[] = $trick;
             $game->currentTrick = null;
         }
