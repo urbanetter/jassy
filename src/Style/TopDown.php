@@ -5,21 +5,21 @@ namespace Jass\Style;
 
 use Jass\Entity\Card;
 use Jass\Entity\Card\Value;
-use Jass\Entity\Team;
 use Jass\Entity\Trick;
 use Jass\Hand;
-use function Jass\Trick\playedCards;
-use function Jass\Trick\winner;
+use Jass\Style;
 
 class TopDown extends Style
 {
+
+    public $name = "Obeabä";
 
     /**
      * @param Card $card
      * @param string $leadingSuit
      * @return int
      */
-    public function orderValue(Card $card, $leadingSuit = null)
+    public function orderValue(Card $card, $leadingSuit = null) : int
     {
         $order = $this->order();
         $result = array_search($card->value, $order);
@@ -36,50 +36,20 @@ class TopDown extends Style
         return [Value::SIX, Value::SEVEN, Value::EIGHT, Value::NINE, Value::TEN, Value::JACK, Value::QUEEN, Value::KING, Value::ACE];
     }
 
-    public function points(Card $card)
+    public function points(Card $card) : int
     {
         $values = [Value::EIGHT => 8, Value::TEN => 10, Value::JACK => 2, Value::QUEEN => 3, Value::KING => 4, Value::ACE => 11];
 
         return (isset($values[$card->value])) ? $values[$card->value] : 0;
     }
 
-    public function teamPoints($tricks, $team)
-    {
-        $points = array_reduce($tricks, function ($points, Trick $trick) use ($team) {
-            if (winner($trick, $this->orderFunction())->team == $team) {
-                $points += array_sum(array_map(function (Card $card) {
-                    return $this->points($card);
-                }, playedCards($trick)));
-            }
-        }, 0);
-
-        // winner of last trick in game gets 5 extra points
-        $lastTrick  = Hand\last($tricks);
-        if (winner($lastTrick, $this->orderFunction())->team == $team) {
-            $points += 5;
-        }
-
-        // if matched, 100 extra points
-        if ($points == 157) {
-            $points += 100;
-        }
-
-        return $points;
-    }
-
-    public function name()
-    {
-        return "Obäabä";
-    }
-
-    public function isValidCard(Trick $trick, $hand, Card $card)
+    public function isValidCard(Trick $trick, $hand, Card $card) : bool
     {
         if ($trick->leadingSuit) {
             if (Hand\canFollowSuit($hand, $trick->leadingSuit)) {
                 return $card->suit == $trick->leadingSuit;
             }
-        } else {
-            return true;
         }
+        return true;
     }
 }

@@ -11,19 +11,22 @@ use function Jass\Trick\playedCards;
 
 class Trump extends TopDown
 {
+    public $name = "Trumpf";
+
     public $trumpSuit;
 
     /**
      * Trump constructor.
-     * @param $trumpSuit
+     * @param string $trumpSuit
      */
     public function __construct($trumpSuit)
     {
         $this->trumpSuit = $trumpSuit;
+        $this->name .= ' ' . $trumpSuit;
     }
 
 
-    public function orderValue(Card $card, $leadingSuit = null)
+    public function orderValue(Card $card, $leadingSuit = null) : int
     {
         if ($card->suit == $this->trumpSuit) {
             $order = [Value::SIX, Value::SEVEN, Value::EIGHT, Value::TEN, Value::QUEEN, Value::KING, Value::ACE, Value::NINE, Value::JACK];
@@ -47,7 +50,7 @@ class Trump extends TopDown
 
     }
 
-    public function points(Card $card)
+    public function points(Card $card) : int
     {
         if ($this->trumpSuit == $card->suit) {
             $points = [Value::JACK => 20, Value::NINE => 14, Value::TEN => 10, Value::QUEEN => 3, Value::KING => 4, Value::ACE => 11];
@@ -58,12 +61,7 @@ class Trump extends TopDown
         return isset($points[$card->value]) ? $points[$card->value] : 0;
     }
 
-    public function name()
-    {
-        return $this->trumpSuit . " Trumpf";
-    }
-
-    public function isValidCard(Trick $trick, $hand, Card $card)
+    public function isValidCard(Trick $trick, $hand, Card $card) : bool
     {
         if ($card->suit == $this->trumpSuit) {
             $playedTrumpCards = suit(playedCards($trick), $this->trumpSuit);
@@ -79,6 +77,4 @@ class Trump extends TopDown
         }
         return parent::isValidCard($trick, $hand, $card);
     }
-
-
 }
