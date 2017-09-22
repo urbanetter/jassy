@@ -105,7 +105,7 @@ class MessageHandler
 
         $player = $game->currentPlayer;
         $card = $turn->card;
-        $trick = ($game->currentTrick) ? $game->currentTrick : new Trick();
+        $trick = $game->currentTrick = $game->currentTrick ?? new Trick();
 
         if (!in_array($card, $player->hand)) {
             throw new \LogicException('Card' . $card . ' is not in hand of player ' . $player);
