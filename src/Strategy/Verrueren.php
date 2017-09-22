@@ -10,7 +10,7 @@ use Jass\Entity\Player;
 use Jass\Entity\Trick;
 use Jass\Strategy;
 use Jass\Hand;
-use Jass\Style\Style;
+use Jass\Style;
 
 class Verrueren implements Strategy
 {

@@ -8,7 +8,7 @@ use Jass\Entity\Card;
 use Jass\Entity\Player as PlayerEntity;
 use Jass\Entity\Trick as TrickEntity;
 use Jass\Strategy;
-use Jass\Style\Style;
+use Jass\Style;
 use Jass\Hand;
 use Jass\Player;
 

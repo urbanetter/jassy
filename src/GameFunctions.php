@@ -6,7 +6,7 @@ use Jass\Entity\Game;
 use Jass\Entity\Player;
 use Jass\Entity\Trick;
 use function Jass\Hand\last;
-use Jass\Style\Style;
+use Jass\Style;
 use function Jass\Trick\points;
 use function Jass\Trick\winner;
 

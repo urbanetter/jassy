@@ -3,7 +3,7 @@
 namespace Jass\Message;
 
 
-use Jass\Style\Style;
+use Jass\Style;
 
 class StyleSetup implements Message
 {

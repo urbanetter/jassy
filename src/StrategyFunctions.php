@@ -7,7 +7,7 @@ use Jass\Entity\Card;
 use Jass\Entity\Player;
 use Jass\Entity\Trick;
 use Jass\Strategy;
-use Jass\Style\Style;
+use Jass\Style;
 
 /**
  * @param string[] $classNames

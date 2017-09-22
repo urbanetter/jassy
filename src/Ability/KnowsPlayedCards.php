@@ -6,7 +6,7 @@ namespace Jass\Ability;
 use Jass\Ability;
 use Jass\Entity\Player;
 use Jass\Entity\Trick;
-use Jass\Style\Style;
+use Jass\Style;
 use function Jass\Trick\playedCards;
 
 class KnowsPlayedCards implements Ability

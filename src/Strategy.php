@@ -6,7 +6,6 @@ namespace Jass;
 use Jass\Entity\Card;
 use Jass\Entity\Player;
 use Jass\Entity\Trick;
-use Jass\Style\Style;
 
 interface Strategy
 {

@@ -7,7 +7,7 @@ use Jass\Entity\Player;
 use Jass\Entity\Trick;
 use Jass\Hand;
 use Jass\Strategy;
-use Jass\Style\Style;
+use Jass\Style;
 
 class Dumb implements Strategy
 {

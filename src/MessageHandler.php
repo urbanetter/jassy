@@ -5,7 +5,6 @@ namespace Jass;
 use Jass\Entity\Game;
 use Jass\Entity\Trick;
 use Jass\Message\Deal;
-use Jass\Style\Style;
 use Jass\Message\Message;
 use Jass\Message\PlayerSetup;
 use Jass\Message\StyleSetup;

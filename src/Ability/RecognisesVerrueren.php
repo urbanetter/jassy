@@ -6,7 +6,7 @@ namespace Jass\Ability;
 use Jass\Ability;
 use Jass\Entity\Player;
 use Jass\Entity\Trick as TrickEntity;
-use Jass\Style\Style;
+use Jass\Style;
 use Jass\Trick;
 
 class RecognisesVerrueren implements Ability

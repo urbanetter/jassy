@@ -3,7 +3,7 @@
 namespace Jass\Entity;
 
 
-use Jass\Style\Style;
+use Jass\Style;
 
 class Game
 {
