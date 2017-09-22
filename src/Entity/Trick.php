@@ -3,8 +3,6 @@
 namespace Jass\Entity;
 
 
-use Jass\Entity\Card\Suit;
-
 class Trick
 {
     /**
@@ -13,7 +11,7 @@ class Trick
     public $turns;
 
     /**
-     * @var Suit
+     * @var string
      */
     public $leadingSuit;
 }
