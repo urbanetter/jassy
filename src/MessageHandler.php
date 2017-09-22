@@ -78,7 +78,7 @@ class MessageHandler
             throw new \LogicException('Not allowed to deal cards when game has already started');
         }
 
-        if ($game->players && count($game->players) == Game::NUMBER_OF_PLAYERS) {
+        if ($game->players && count($game->players) != Game::NUMBER_OF_PLAYERS) {
             throw new \LogicException('Game not ready to deal. Set players before.');
         }
 
