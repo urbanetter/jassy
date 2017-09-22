@@ -9,7 +9,9 @@ use Jass\Entity\Card\Suit;
 use Jass\Entity\Player;
 use Jass\Entity\Card;
 use Jass\Entity\Trick;
-use Jass\Intelligence;
+use function Jass\Strategy\card;
+use function Jass\Strategy\firstCardOfTrick;
+use function Jass\Strategy\seeTrick;
 use Jass\Style\TopDown;
 use PHPUnit\Framework\TestCase;
 use Tests\Strategy\RoseIsMyFavoriteSuit;
@@ -18,26 +20,24 @@ class IntelligenceTest extends TestCase
 {
     public function testRoses()
     {
-        $intelligence = new Intelligence();
         $style = new TopDown();
 
         $ueli = new Player();
         $ueli->hand = bySuitsAndValues([Suit::ROSE], values());
         $ueli->strategies = [RoseIsMyFavoriteSuit::class];
 
-        $intelligence->registerPlayerIntelligence($ueli);
 
         $expected = Card::from(Suit::ROSE, Card\Value::ACE);
-        $this->assertEquals($expected, $intelligence->firstCard($ueli, $style));
+        $this->assertEquals($expected, firstCardOfTrick($ueli, $style));
 
         $trick = new Trick();
-        $intelligence->seeTrick($ueli, $trick, $style);
+        seeTrick($ueli, $trick, $style);
 
         $this->assertArrayHasKey('hello', $ueli->brain);
         $this->assertEquals('world', $ueli->brain['hello']);
 
         $this->expectException(\LogicException::class);
         $this->expectExceptionMessage('Could not figure out next card for player Ueli');
-        $intelligence->card($ueli, $trick, $style);
+        card($ueli, $trick, $style);
     }
 }

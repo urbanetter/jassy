@@ -21,6 +21,7 @@
             "src/HandFunctions.php",
             "src/TrickFunctions.php",
             "src/GameFunctions.php",
+            "src/StrategyFunctions.php",
             "src/PlayerFunctions.php"
         ]
     },
