@@ -15,6 +15,7 @@ class RecognisesAzeige implements Ability
 
     public static function seeTrick(PlayerEntity $player, Trick $trick, Style $style)
     {
+        // try to find out which suit the partner wants
         if ($trick->turns[2]->player === $player) {
             $leadingCard = $trick->turns[0]->card;
             $playedCards = $player->brain[KnowsPlayedCards::CARDS] ?? [];
@@ -23,6 +24,5 @@ class RecognisesAzeige implements Ability
                 $player->brain[self::SUIT_WANTED_BY_PARTNER] = $leadingCard->suit;
             }
         }
-
     }
 }

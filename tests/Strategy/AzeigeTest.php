@@ -7,6 +7,7 @@ use Jass\Ability\RecognisesAzeige;
 use function Jass\CardSet\byShortcuts;
 use Jass\Entity\Card;
 use Jass\Entity\Card\Suit;
+use Jass\Entity\Player;
 use Jass\Entity\Trick;
 use function Jass\Player\byNames;
 use Jass\Strategy\Azeige;
@@ -41,6 +42,17 @@ class AzeigeTest extends TestCase
 
         $card = Azeige::firstCardOfTrick($franz, $style);
         $this->assertEquals(Card::shortcut('s7'), $card);
-
     }
+
+    public function testDoesNotWorkWhenThereIsStillAWinningCard()
+    {
+        $ueli = new Player();
+        $style = new TopDown();
+
+        $ueli->hand = byShortcuts('ba, sk, sq, s6');
+
+        $this->assertNull(Azeige::firstCardOfTrick($ueli, $style));
+    }
+
+
 }
