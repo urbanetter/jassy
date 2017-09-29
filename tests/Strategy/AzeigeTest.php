@@ -40,8 +40,27 @@ class AzeigeTest extends TestCase
         $this->assertEquals(Suit::SHIELD, $franz->brain[RecognisesAzeige::SUIT_WANTED_BY_PARTNER]);
         $this->assertEquals($franz, winner($firstTrick, $style->orderFunction()));
 
+        RecognisesAzeige::seeTrick($ueli, $firstTrick, $style);
+
+        $this->assertArrayNotHasKey(RecognisesAzeige::SUIT_WANTED_BY_PARTNER, $ueli->brain);
+        $this->assertArrayHasKey(RecognisesAzeige::SUIT_WANTED_BY_ME, $ueli->brain);
+        $this->assertEquals(Suit::SHIELD, $ueli->brain[RecognisesAzeige::SUIT_WANTED_BY_ME]);
+
         $card = Azeige::firstCardOfTrick($franz, $style);
         $this->assertEquals(Card::shortcut('s7'), $card);
+
+        $secondTrick = new Trick();
+        $secondTrick = addTurn($secondTrick, $franz, $card);
+        $secondTrick = addTurn($secondTrick, $hans, Card::shortcut('s8'));
+        $secondTrick = addTurn($secondTrick, $ueli, Card::shortcut('sk'));
+        $secondTrick = addTurn($secondTrick, $fritz, Card::shortcut('o9'));
+
+        RecognisesAzeige::seeTrick($ueli, $secondTrick, $style);
+
+        $this->assertArrayNotHasKey(RecognisesAzeige::SUIT_WANTED_BY_PARTNER, $ueli->brain);
+
+
+
     }
 
     public function testDoesNotWorkWhenThereIsStillAWinningCard()
