@@ -59,11 +59,31 @@ function firstCardOfTrick(Player $player, Style $style) : Card
     throw new \LogicException('Could not figure out first card for player ' . $player);
 }
 
+function firstCardOfTrickStrategy(Player $player, Style $style) : Strategy
+{
+    foreach (strategyClasses($player->strategies) as $strategy) {
+        if (($card = $strategy->firstCardOfTrick($player, $style)) !== null) {
+            return $strategy;
+        }
+    }
+    throw new \LogicException('Could not figure out first card for player ' . $player);
+}
+
 function card(Player $player, Trick $trick, Style $style) : Card
 {
     foreach (strategyClasses($player->strategies) as $strategy) {
         if (($card = $strategy->card($player, $trick, $style)) !== null) {
             return $card;
+        }
+    }
+    throw new \LogicException('Could not figure out next card for player ' . $player);
+}
+
+function cardStrategy(Player $player, Trick $trick, Style $style) : Strategy
+{
+    foreach (strategyClasses($player->strategies) as $strategy) {
+        if (($card = $strategy->card($player, $trick, $style)) !== null) {
+            return $strategy;
         }
     }
     throw new \LogicException('Could not figure out next card for player ' . $player);
