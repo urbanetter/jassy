@@ -91,12 +91,17 @@ function cardStrategy(Player $player, Trick $trick, Style $style) : Strategy
 
 function seeTrick(Player $player, Trick $trick, Style $style)
 {
+    $abilityNames = playerAbilities($player);
+    foreach (abilityClasses($abilityNames) as $ability) {
+        $ability->seeTrick($player, $trick, $style);
+    }
+}
+
+function playerAbilities(Player $player)
+{
     $strategies = strategyClasses($player->strategies);
     $abilityNames = array_reduce($strategies, function($abilities, Strategy $strategy) {
         return array_merge($abilities, $strategy->abilities());
     }, []);
-    $abilityNames = array_unique($abilityNames);
-    foreach (abilityClasses($abilityNames) as $ability) {
-        $ability->seeTrick($player, $trick, $style);
-    }
+    return array_unique($abilityNames);
 }
