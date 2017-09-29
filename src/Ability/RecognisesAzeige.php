@@ -24,7 +24,7 @@ class RecognisesAzeige implements Ability
             $leadingCard = $trick->turns[0]->card;
             if ($leadingCard !== Hand\bock($playedCards, $leadingCard->suit, $style->orderFunction())) {
                 // no winner card, treat it like "azeigt"
-                if ($leadingCard->suit != $player->brain[self::SUIT_WANTED_BY_ME]) {
+                if (!isset($player->brain[self::SUIT_WANTED_BY_ME]) || $leadingCard->suit != $player->brain[self::SUIT_WANTED_BY_ME]) {
                     $player->brain[self::SUIT_WANTED_BY_PARTNER] = $leadingCard->suit;
                 }
             }
