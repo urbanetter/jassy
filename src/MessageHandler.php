@@ -50,6 +50,11 @@ class MessageHandler
             $game->currentPlayer = $game->players[array_rand($game->players)];
         }
 
+        // brains are empty at the beginning
+        foreach ($game->players as $player) {
+            $player->brain = [];
+        }
+
         return $game;
     }
 
