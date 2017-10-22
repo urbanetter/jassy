@@ -3,6 +3,7 @@
 namespace Tests\Strategy;
 
 
+use Jass\Ability\ClassifySuits;
 use Jass\Ability\RecognisesVerrueren;
 use function Jass\CardSet\byShortcuts;
 use Jass\Entity\Card;
@@ -58,11 +59,12 @@ class VerruerenTest extends TestCase
 
         $player->hand = byShortcuts('sq, sj, bj, rk, rq, r6');
         $trick = new Trick();
+
+        ClassifySuits::seeTrick($player, $trick, $style);
+
         $trick = addTurn($trick, $starter, Card::shortcut('oa'));
 
         $actual = Verrueren::card($player, $trick, $style);
-        $this->assertContains(Card\Suit::BELL, $player->brain[Verrueren::BAD_SUITS]);
-        $this->assertContains(Card\Suit::SHIELD, $player->brain[Verrueren::BAD_SUITS]);
         $this->assertEquals(Card::shortcut('bj'), $actual);
 
         $player->hand = playCardOfHand($player->hand, Card::shortcut('bj'));
@@ -75,4 +77,5 @@ class VerruerenTest extends TestCase
         $this->assertNull(Verrueren::card($player, $trick, $style));
 
     }
+
 }

@@ -3,6 +3,7 @@
 namespace Jass\Strategy;
 
 
+use Jass\Ability\ClassifySuits;
 use Jass\Ability\KnowsPlayedCards;
 use Jass\Ability\RecognisesVerrueren;
 use Jass\Entity\Card;
@@ -14,7 +15,6 @@ use Jass\Style;
 
 class Verrueren implements Strategy
 {
-    const BAD_SUITS = 'bad-suits';
 
     public static function firstCardOfTrick(Player $player, Style $style): ?Card
     {
@@ -35,21 +35,9 @@ class Verrueren implements Strategy
 
     public static function card(Player $player, Trick $trick, Style $style): ?Card
     {
-        if (!isset($player->brain[self::BAD_SUITS])) {
-            $player->brain[self::BAD_SUITS] = [];
-            $suits = Hand\suits($player->hand);
-            foreach ($suits as $suit) {
-                $playedCards = $player->brain[KnowsPlayedCards::CARDS] ?? [];
-                $potential = Hand\potential($playedCards, $player->hand, $suit, $style->orderFunction());
-                if ($potential < 10) {
-                    $player->brain[self::BAD_SUITS][$potential] = $suit;
-                }
-            }
-            ksort($player->brain[self::BAD_SUITS]);
-            $player->brain[self::BAD_SUITS] = array_values($player->brain[self::BAD_SUITS]);
-        }
         if (!Hand\canFollowSuit($player->hand, $trick->leadingSuit)) {
-            foreach ($player->brain[self::BAD_SUITS] as $badSuit) {
+            $badSuits = $player->brain[ClassifySuits::BAD_SUITS] ?? [];
+            foreach ($badSuits as $badSuit) {
                 $badCards = Hand\suit($player->hand, $badSuit);
                 if ($badCards) {
                     return Hand\lowest($badCards, $style->orderFunction());
@@ -61,6 +49,6 @@ class Verrueren implements Strategy
 
     public static function abilities()
     {
-        return [RecognisesVerrueren::class, KnowsPlayedCards::class];
+        return [RecognisesVerrueren::class, KnowsPlayedCards::class, ClassifySuits::class];
     }
 }
