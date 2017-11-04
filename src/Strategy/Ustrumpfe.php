@@ -24,9 +24,10 @@ class Ustrumpfe implements Strategy
         
         $trickCount = $player->brain[TrickCounter::TRICK_COUNTER] ?? 1;
         $choosingTeam = $player->brain[TrickCounter::CHOOSING_TEAM] ?? false;
+        $teamOnlySuits = $player->brain[TeamOnlySuits::TEAM_ONLY_SUITS] ?? [];
 
         if ($trickCount == 1 || $choosingTeam) {
-            if (!in_array($style->trumpSuit, $player->brain[TeamOnlySuits::TEAM_ONLY_SUITS])) {
+            if (!in_array($style->trumpSuit, $teamOnlySuits)) {
                 return highest(suit($player->hand, $style->trumpSuit), $style->orderFunction());
             }
         }
