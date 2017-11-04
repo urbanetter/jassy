@@ -63,7 +63,7 @@ class Trump extends TopDown
 
     public function isValidCard(Trick $trick, $hand, Card $card) : bool
     {
-        if ($card->suit == $this->trumpSuit) {
+        if ($card->suit == $this->trumpSuit && $trick->leadingSuit != $this->trumpSuit) {
             $playedTrumpCards = suit(playedCards($trick), $this->trumpSuit);
             if ($playedTrumpCards) {
                 $highest = highest($playedTrumpCards, $this->orderFunction());
