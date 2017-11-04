@@ -4,36 +4,22 @@ namespace Jass\Strategy;
 
 
 use Jass\Entity\Card;
-use Jass\Entity\Player;
-use Jass\Entity\Trick;
-use function Jass\Hand\canFollowSuit;
-use function Jass\Hand\lowest;
-use function Jass\Hand\suit;
+use Jass\Entity\Game;
+use Jass\Knowledge\SuitsKnowledge;
 use Jass\Strategy;
-use Jass\Style;
-use Jass\Ability\TeamOnlySuits as Ability;
+use Jass\Hand;
 
 class TeamOnlySuits implements Strategy
 {
-
-    public static function firstCardOfTrick(Player $player, Style $style): ?Card
+    public function chooseCard(Game $game): ?Card
     {
-        $teamOnlySuits = $player->brain[Ability::TEAM_ONLY_SUITS] ?? [];
-        foreach ($teamOnlySuits as $suit) {
-            if (canFollowSuit($player->hand, $suit)) {
-                return lowest(suit($player->hand, $suit), $style->orderFunction());
+        $suits = SuitsKnowledge::analyze($game)->suitsOnlyInMyTeam;
+        $hand = $game->currentPlayer->hand;
+        foreach ($suits as $suit) {
+            if (Hand\canFollowSuit($hand, $suit)) {
+                return Hand\lowest($hand, $game->style->orderFunction());
             }
         }
         return null;
-    }
-
-    public static function card(Player $player, Trick $trick, Style $style): ?Card
-    {
-        return null;
-    }
-
-    public static function abilities()
-    {
-        return [Ability::class];
     }
 }

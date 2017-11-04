@@ -4,39 +4,30 @@ namespace Jass\Strategy;
 
 
 use Jass\Entity\Card;
-use Jass\Entity\Player;
-use Jass\Entity\Trick as TrickEntity;
+use Jass\Entity\Game;
+use Jass\Knowledge\TrickKnowledge;
 use Jass\Strategy;
-use Jass\Style;
 use Jass\Hand;
-use Jass\Trick;
 
 class Simple implements Strategy
 {
-
-    public static function firstCardOfTrick(Player $player, Style $style): ?Card
+    public function chooseCard(Game $game): ?Card
     {
-        return Hand\highest($player->hand, $style->orderFunction());
-    }
-
-    public static function card(Player $player, TrickEntity $trick, Style $style): ?Card
-    {
-        if (Hand\canFollowSuit($player->hand, $trick->leadingSuit)) {
-            $card = Hand\highest(Hand\suit($player->hand, $trick->leadingSuit), $style->orderFunction());
-            $bestTrickCard = Hand\highest(Hand\suit(Trick\playedCards($trick), $trick->leadingSuit), $style->orderFunction());
-            if ($style->orderValue($bestTrickCard) > $style->orderValue($card)) {
-                $card =  Hand\lowest(Hand\suit($player->hand, $trick->leadingSuit), $style->orderFunction());
-            }
+        $trick = TrickKnowledge::analyze($game);
+        $player = $game->currentPlayer;
+        if ($trick->canLead) {
+            $card = Hand\highest($player->hand, $game->style->orderFunction());
         } else {
-            $card = Hand\lowest($player->hand, $style->orderFunction());
+            if (Hand\canFollowSuit($player->hand, $trick->leadingSuit)) {
+                $card = Hand\highest(Hand\suit($player->hand, $trick->leadingSuit), $game->style->orderFunction());
+                if ($game->style->orderValue($trick->bestCard) > $game->style->orderValue($card)) {
+                    $card =  Hand\lowest(Hand\suit($player->hand, $trick->leadingSuit), $game->style->orderFunction());
+                }
+            } else {
+                $card = Hand\lowest($player->hand, $game->style->orderFunction());
+            }
+
         }
-
         return $card;
-
-    }
-
-    public static function abilities()
-    {
-        return [];
     }
 }

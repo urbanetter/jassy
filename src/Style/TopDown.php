@@ -40,7 +40,7 @@ class TopDown extends Style
     {
         $values = [Value::EIGHT => 8, Value::TEN => 10, Value::JACK => 2, Value::QUEEN => 3, Value::KING => 4, Value::ACE => 11];
 
-        return (isset($values[$card->value])) ? $values[$card->value] : 0;
+        return $values[$card->value] ?? 0;
     }
 
     public function isValidCard(Trick $trick, $hand, Card $card) : bool

@@ -7,7 +7,6 @@ use Jass\Entity\Game;
 use Jass\Entity\Player;
 use Jass\Entity\Trick;
 use Jass\Entity\Turn;
-use Jass\CardSet;
 
 function isFinished(Trick $trick)
 {
@@ -62,14 +61,4 @@ function addTurn(Trick $trick, Player $player, Card $card)
     }
 
     return $trick;
-}
-
-function byShortcuts($players, $cards)
-{
-    $result = new Trick();
-    $cards = CardSet\byShortcuts($cards);
-    foreach ($players as $player) {
-        addTurn($result, $player, array_shift($cards));
-    }
-    return $result;
 }

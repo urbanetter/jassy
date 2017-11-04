@@ -2,10 +2,14 @@
 
 namespace Jass\Game;
 
+use Jass\Entity\Card;
 use Jass\Entity\Game;
 use Jass\Entity\Player;
 use Jass\Entity\Trick;
 use function Jass\Hand\last;
+use Jass\Message\TestGame;
+use Jass\Message\Turn;
+use Jass\MessageHandler;
 use Jass\Style;
 use function Jass\Trick\points;
 use function Jass\Trick\winner;
@@ -82,4 +86,47 @@ function teamPoints(string $team, Game $game)
     }
 
     return $points;
+}
+
+function startingHand(Game $game)
+{
+    $player = $game->currentPlayer;
+    return array_reduce($game->playedTricks, function($cards, Trick $trick) use ($player) {
+        foreach ($trick->turns as $turn) {
+            if ($turn->player === $player) {
+                $cards[] = $turn->card;
+            }
+        }
+        return $cards;
+    }, $player->hand);
+}
+
+function playCard(Game $game, $card) : Game
+{
+    if (is_string($card)) {
+        $card = Card::shortcut($card);
+    }
+
+    $turn = new Turn();
+    $turn->card = $card;
+
+    $messageHandler = new MessageHandler();
+
+    return $messageHandler->handle($game, $turn);
+}
+
+function testGame($cards = [], $style = null, $strategies = null, $opponentStrategies = null) : Game
+{
+    $game = new Game();
+
+    $testGame = new TestGame();
+
+    $testGame->cards = $cards;
+    $testGame->style = $style;
+    $testGame->strategies = $strategies;
+    $testGame->opponentStrategies = $opponentStrategies;
+
+    $messageHandler = new MessageHandler();
+
+    return $messageHandler->handle($game, $testGame);
 }

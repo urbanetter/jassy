@@ -3,49 +3,31 @@
 namespace Tests\Strategy;
 
 
+use function Jass\CardSet\byShortcuts;
 use Jass\Entity\Card;
-use Jass\Entity\Player;
-use Jass\Entity\Trick;
-use Jass\Entity\Turn;
-use Jass\Strategy\Simple;
-use Jass\Style\TopDown;
+use function Jass\Game\playCard;
+use function Jass\Game\testGame;
+use function Jass\Strategy\card;
 use PHPUnit\Framework\TestCase;
 
 class SimpleTest extends TestCase
 {
     public function testSimpleStrategy()
     {
-        $ueli = new Player();
-        $fritz = new Player();
-        $style = new TopDown();
+        $game = testGame([
+            byShortcuts('sa,sq,r6,r7'),
+            byShortcuts('ra,rk,s6,s7'),
+            byShortcuts('r8,r9'),
+        ]);
 
+        $this->assertEquals(Card::shortcut('sa'), card($game));
 
-        $ueli->hand = [
-            Card::from(Card\Suit::ROSE, Card\Value::KING),
-            Card::from(Card\Suit::ROSE, Card\Value::QUEEN),
-            Card::from(Card\Suit::BELL, Card\Value::KING),
-            Card::from(Card\Suit::BELL, Card\Value::JACK),
-        ];
+        playCard($game, Card::shortcut('r6'));
 
-        $trick = new Trick;
-        $trick->leadingSuit = Card\Suit::ROSE;
+        $this->assertEquals(Card::shortcut('ra'),card($game));
 
-        $turn = new Turn();
-        $turn->player = $fritz;
-        $turn->card = Card::from(Card\Suit::ROSE, Card\Value::ACE);
-        $trick->turns[] = $turn;
+        playCard($game, Card::shortcut('ra'));
 
-        $this->assertEquals(Card::from(Card\Suit::ROSE, Card\Value::QUEEN), Simple::card($ueli, $trick, $style));
-
-        $trick = new Trick;
-        $trick->leadingSuit = Card\Suit::BELL;
-
-        $turn = new Turn();
-        $turn->player = $fritz;
-        $turn->card = Card::from(Card\Suit::BELL, Card\Value::QUEEN);
-        $trick->turns[] = $turn;
-
-        $this->assertEquals(Card::from(Card\Suit::BELL, Card\Value::KING), Simple::card($ueli, $trick, $style));
-
+        $this->assertEquals(Card::shortcut('r8'), card($game));
     }
 }

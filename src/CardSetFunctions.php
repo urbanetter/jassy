@@ -36,6 +36,11 @@ function suits()
     return [Suit::ROSE, Suit::BELL, Suit::OAK, Suit::SHIELD];
 }
 
+function bySuit($suit)
+{
+    return bySuitsAndValues([$suit], values());
+}
+
 function values()
 {
     return [Value::SIX, Value::SEVEN, Value::EIGHT, Value::NINE, Value::TEN, Value::JACK, Value::QUEEN, Value::KING, Value::ACE];
