@@ -18,9 +18,5 @@ class TrickCounter implements Ability
         $counter = $player->brain[self::TRICK_COUNTER] ?? 1;
         $counter++;
         $player->brain[self::TRICK_COUNTER] = $counter;
-
-        if ($counter == 1) {
-            $player->brain[self::CHOOSING_TEAM] = ($trick->turns[0]->player === $player || $trick->turns[2]->player === $player);
-        }
     }
 }
