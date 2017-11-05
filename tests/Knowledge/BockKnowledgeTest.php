@@ -41,4 +41,27 @@ class BockKnowledgeTest extends TestCase
         $actual = BockKnowledge::analyze($game)->bockCards;
         $this->assertEquals(Card::shortcut('sk'), $actual[Suit::SHIELD]);
     }
+
+    public function testSuitPotential()
+    {
+        $player1Cards = byShortcuts('sk,sq,o6,b6,b7,b8,b9,b10,bj');
+        $player2Cards = byShortcuts('sa,ra,rk,rq,rj,r10,r9,r8,r7');
+
+        $game = testGame([
+            $player1Cards,
+            $player2Cards,
+            byShortcuts('o7'),
+            byShortcuts('o8'),
+        ]);
+
+        $actual = BockKnowledge::analyze($game)->suitPotential;
+
+        $expected = [
+            Suit::SHIELD => 1,
+            Suit::BELL => 3,
+            Suit::OAK => 8,
+        ];
+
+        $this->assertEquals($expected, $actual);
+    }
 }
