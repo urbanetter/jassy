@@ -21,6 +21,8 @@ class BockKnowledge implements Knowledge
     /** @var int[] how many cards need to be played until there is a bock card */
     public $suitPotential = [];
 
+    private $orderFunction;
+
     static public function analyze(Game $game)
     {
         $knowledge = new BockKnowledge();
@@ -46,8 +48,21 @@ class BockKnowledge implements Knowledge
 
         asort($knowledge->suitPotential);
 
+        $knowledge->orderFunction = $game->style->orderFunction();
+
         return $knowledge;
     }
 
+    /**
+     * @param Card $candidate
+     * @param Card[] $playedCards
+     * @return bool
+     */
+    public function isBockByPlayedCards(Card $candidate, $playedCards)
+    {
+        $allCards = bySuit($candidate->suit);
+        $notPlayed = array_diff($allCards, suit($playedCards, $candidate->suit));
 
+        return highest($notPlayed, $this->orderFunction) === $candidate;
+    }
 }
