@@ -5,6 +5,7 @@ namespace Jass\Knowledge;
 use Jass\Entity\Game;
 use function Jass\CardSet\bySuit;
 use function Jass\CardSet\suits;
+use Jass\Entity\Trick;
 use function Jass\Hand\highest;
 use function Jass\Hand\ordered;
 use function Jass\Hand\suit;
@@ -23,6 +24,8 @@ class BockKnowledge implements Knowledge
 
     private $orderFunction;
 
+    private $playedCards = [];
+
     static public function analyze(Game $game)
     {
         $knowledge = new BockKnowledge();
@@ -31,6 +34,7 @@ class BockKnowledge implements Knowledge
         foreach ($game->playedTricks as $trick) {
             $playedCards = array_merge($playedCards, playedCards($trick));
         }
+        $knowledge->playedCards = $playedCards;
 
         foreach (suits() as $suit) {
             $allCards = bySuit($suit);
@@ -64,5 +68,19 @@ class BockKnowledge implements Knowledge
         $notPlayed = array_diff($allCards, suit($playedCards, $candidate->suit));
 
         return highest($notPlayed, $this->orderFunction) === $candidate;
+    }
+
+    public function bockWithTrick(Trick $trick)
+    {
+        $playedCards = array_merge($this->playedCards, playedCards($trick));
+
+        $result = [];
+        foreach (suits() as $suit) {
+            $allCards = bySuit($suit);
+            $notPlayed = array_diff($allCards, suit($playedCards, $suit));
+
+            $result[$suit] = highest($notPlayed, $this->orderFunction);
+        }
+        return $result;
     }
 }

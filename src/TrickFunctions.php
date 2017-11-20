@@ -13,18 +13,18 @@ function isFinished(Trick $trick) : bool
     return count($trick->turns) == Game::NUMBER_OF_PLAYERS;
 }
 
-function winner(Trick $trick, $valueFunction) : Player
+function winner(Trick $trick, Callable $orderFunction) : Player
 {
-    return winningTurn($trick, $valueFunction)->player;
+    return winningTurn($trick, $orderFunction)->player;
 }
 
-function winningTurn(Trick $trick, $valueFunction) : Turn
+function winningTurn(Trick $trick, Callable $orderFunction) : Turn
 {
-    $winningTurn = array_reduce($trick->turns, function ($winning, $turn) use ($valueFunction, $trick) {
+    $winningTurn = array_reduce($trick->turns, function ($winning, $turn) use ($orderFunction, $trick) {
         if (!$winning) {
             return $turn;
         }
-        if ($valueFunction($turn->card, $trick->leadingSuit) > $valueFunction($winning->card, $trick->leadingSuit)) {
+        if ($orderFunction($turn->card, $trick->leadingSuit) > $orderFunction($winning->card, $trick->leadingSuit)) {
             return $turn;
         } else {
             return $winning;

@@ -4,6 +4,7 @@ namespace Jass\Knowledge;
 
 
 use Jass\Entity\Game;
+use Jass\Entity\Player;
 use function Jass\Game\teamMate;
 use Jass\Knowledge;
 use function Jass\Player\isInMyTeam;
@@ -22,13 +23,16 @@ class TeamMateKnowledge implements Knowledge
     /** @var string[] */
     public $tossedSuits = [];
 
+    /** @var Player */
+    public $player;
+
     static public function analyze(Game $game)
     {
         $knowledge = new TeamMateKnowledge();
 
         $player = $game->currentPlayer;
         $bock = BockKnowledge::analyze($game);
-        $teamMate = teamMate($game, $player);
+        $teamMate = $knowledge->player = teamMate($game, $player);
 
         // no card of a suit = bad suit
         foreach ($game->playedTricks as $trick) {
