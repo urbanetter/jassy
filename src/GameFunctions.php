@@ -56,7 +56,7 @@ function teamMatched(string $team, Game $game) : bool
         return winner($trick, $game->style->orderFunction())->team == $team;
     });
 
-    return $tricksWon == Game::NUMBER_OF_CARDS;
+    return count($tricksWon) == Game::NUMBER_OF_CARDS;
 }
 
 function teamWonLastTrick(string $team, Game $game) : bool
