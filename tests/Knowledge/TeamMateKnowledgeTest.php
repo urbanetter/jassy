@@ -51,8 +51,12 @@ class TeamMateKnowledgeTest extends TestCase
         $game = playCard($game, 'o6');
         $game = playCard($game, 's7');
 
-        $actual = TeamMateKnowledge::analyze($game)->badSuits;
+        $actual = TeamMateKnowledge::analyze($game)->tossedSuits;
         $this->assertContains(Suit::OAK, $actual);
+
+        $actual = TeamMateKnowledge::analyze($game)->badSuits;
+        $this->assertContains(Suit::SHIELD, $actual);
+
 
     }
 }
