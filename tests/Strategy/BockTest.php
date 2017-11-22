@@ -5,28 +5,31 @@ namespace Tests\Strategy;
 
 use function Jass\CardSet\byShortcuts;
 use Jass\Entity\Card;
-use Jass\Entity\Player;
+use function Jass\Game\playCard;
+use function Jass\Game\testGame;
 use Jass\Strategy\Bock;
-use Jass\Style\TopDown;
 use PHPUnit\Framework\TestCase;
 
 class BockTest extends TestCase
 {
     public function testBock()
     {
-        $player = new Player('Ueli');
-        $style = new TopDown();
-        $player->hand = byShortcuts('rq, rj, r10, s6, s7, s8, s9, s10, sj');
+        $game = testGame([
+            byShortcuts('sk,sq,oj,b6,b7,b8,b9,b10,bj'),
+            byShortcuts('sa,ra,rk,rq,rj,r10,r9,r8,r7'),
+            byShortcuts('o7'),
+            byShortcuts('o8'),
+        ]);
 
-        $this->assertNull(Bock::firstCardOfTrick($player, $style));
+        $sut = new Bock();
+        $this->assertNull($sut->chooseCard($game));
 
-        $player->brain['playedCards'] = [Card::shortcut('ra')];
+        $game = playCard($game, 'oj');
+        $game = playCard($game, 'sa');
+        $game = playCard($game, 'o7');
+        $game = playCard($game, 'o8');
 
-        $this->assertNull(Bock::firstCardOfTrick($player, $style));
-
-        $player->brain['playedCards'] = [Card::shortcut('ra'), Card::shortcut('rk')];
-
-        $this->assertEquals(Card::shortcut('rq'), Bock::firstCardOfTrick($player, $style));
+        $this->assertEquals(Card::shortcut('sk'), $sut->chooseCard($game));
 
     }
 }

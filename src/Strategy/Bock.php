@@ -3,39 +3,30 @@
 namespace Jass\Strategy;
 
 
-use Jass\Ability\KnowsPlayedCards;
 use Jass\Entity\Card;
-use Jass\Entity\Player;
-use Jass\Entity\Trick;
+use Jass\Entity\Game;
+use Jass\Knowledge\BockKnowledge;
+use Jass\Knowledge\TrickKnowledge;
+use Jass\Knowledge\TrumpKnowledge;
 use Jass\Strategy;
-use Jass\Style;
-use Jass\CardSet;
-use Jass\Hand;
 
 class Bock implements Strategy
 {
-
-    public static function firstCardOfTrick(Player $player, Style $style): ?Card
+    public function chooseCard(Game $game): ?Card
     {
-        $playedCards = $player->brain['playedCards'] ?? [];
-        foreach (CardSet\suits() as $suit) {
-            $bockCard = Hand\bock($playedCards, $suit, $style->orderFunction());
-            if (in_array($bockCard, $player->hand)) {
-                return $bockCard;
+        $trick = TrickKnowledge::analyze($game);
+        if ($trick->canLead) {
+            $bock = BockKnowledge::analyze($game);
+            $trump = TrumpKnowledge::analyze($game);
+            foreach ($bock->bockCards as $card) {
+                if (in_array($card, $game->currentPlayer->hand)) {
+                    if ($trump->isTrumpGame && !$trump->shouldLeadWithTrump && $card->suit === $trump->suit) {
+                        continue;
+                    }
+                    return $card;
+                }
             }
         }
-
         return null;
-
-    }
-
-    public static function card(Player $player, Trick $trick, Style $style): ?Card
-    {
-        return null;
-    }
-
-    public static function abilities()
-    {
-        return [KnowsPlayedCards::class];
     }
 }

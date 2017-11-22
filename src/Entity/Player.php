@@ -21,23 +21,16 @@ class Player
     public $team;
 
     /**
-     * @var array
-     */
-    public $brain;
-
-    /**
      * @var string[]
      */
     public $strategies;
 
     /**
      * @param string $name
-     * @param string $team
      */
-    public function __construct($name = 'Ueli', $team = 'Team Ueli')
+    public function __construct($name = 'Ueli')
     {
         $this->name = $name;
-        $this->team = $team;
     }
 
     public function __toString()

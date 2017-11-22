@@ -2,25 +2,29 @@
 
 namespace Jass\Game;
 
+use Jass\Entity\Card;
 use Jass\Entity\Game;
 use Jass\Entity\Player;
 use Jass\Entity\Trick;
 use function Jass\Hand\last;
+use Jass\Message\TestGame;
+use Jass\Message\Turn;
+use Jass\MessageHandler;
 use Jass\Style;
 use function Jass\Trick\points;
 use function Jass\Trick\winner;
 
-function isFinished(Game $game)
+function isFinished(Game $game) : bool
 {
     return count($game->playedTricks) == Game::NUMBER_OF_CARDS;
 }
 
-function hasStarted(Game $game)
+function hasStarted(Game $game) : bool
 {
     return count($game->playedTricks) > 0 || $game->currentTrick;
 }
 
-function isReady(Game $game)
+function isReady(Game $game) : bool
 {
     return
         $game->players
@@ -33,12 +37,16 @@ function isReady(Game $game)
     ;
 }
 
+/**
+ * @param Game $game
+ * @return string[] team names
+ */
 function teams(Game $game)
 {
     return [$game->players[0]->team, $game->players[1]->team];
 }
 
-function teamMatched(string $team, Game $game)
+function teamMatched(string $team, Game $game) : bool
 {
     if (!isFinished($game)) {
         return false;
@@ -51,7 +59,7 @@ function teamMatched(string $team, Game $game)
     return $tricksWon == Game::NUMBER_OF_CARDS;
 }
 
-function teamWonLastTrick(string $team, Game $game)
+function teamWonLastTrick(string $team, Game $game) : bool
 {
     if (!isFinished($game)) {
         return false;
@@ -62,7 +70,7 @@ function teamWonLastTrick(string $team, Game $game)
     return winner($lastTrick, $game->style->orderFunction())->team == $team;
 }
 
-function teamPoints(string $team, Game $game)
+function teamPoints(string $team, Game $game) : int
 {
     $points = array_reduce($game->playedTricks, function($sum, Trick $trick) use ($game, $team) {
         if (winner($trick, $game->style->orderFunction())->team == $team) {
@@ -82,4 +90,61 @@ function teamPoints(string $team, Game $game)
     }
 
     return $points;
+}
+
+/**
+ * @param Game $game
+ * @return Card[]
+ */
+function startingHand(Game $game)
+{
+    $player = $game->currentPlayer;
+    return array_reduce($game->playedTricks, function($cards, Trick $trick) use ($player) {
+        foreach ($trick->turns as $turn) {
+            if ($turn->player === $player) {
+                $cards[] = $turn->card;
+            }
+        }
+        return $cards;
+    }, $player->hand);
+}
+
+function teamMate(Game $game, Player $player) : ?Player
+{
+    foreach ($game->players as $candidate) {
+        if ($player !== $candidate && $candidate->team === $player->team) {
+            return $candidate;
+        }
+    }
+    return null;
+}
+
+function playCard(Game $game, $card) : Game
+{
+    if (is_string($card)) {
+        $card = Card::shortcut($card);
+    }
+
+    $turn = new Turn();
+    $turn->card = $card;
+
+    $messageHandler = new MessageHandler();
+
+    return $messageHandler->handle($game, $turn);
+}
+
+function testGame($cards = [], $style = null, $strategies = null, $opponentStrategies = null) : Game
+{
+    $game = new Game();
+
+    $testGame = new TestGame();
+
+    $testGame->cards = $cards;
+    $testGame->style = $style;
+    $testGame->strategies = $strategies;
+    $testGame->opponentStrategies = $opponentStrategies;
+
+    $messageHandler = new MessageHandler();
+
+    return $messageHandler->handle($game, $testGame);
 }
