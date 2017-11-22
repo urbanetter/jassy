@@ -54,7 +54,7 @@ class TrumpKnowledge implements Knowledge
         }
         $player = $game->currentPlayer;
         $trumpSuit = $knowledge->suit = $game->style->trumpSuit;
-        $trumpHand = $knowledge->hand = suit($player->hand, $trumpSuit);
+        $trumpHand = $knowledge->hand = array_values(suit($player->hand, $trumpSuit));
         $trumpPlayed = [];
 
         $suits = SuitsKnowledge::analyze($game);

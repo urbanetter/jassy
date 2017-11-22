@@ -161,6 +161,9 @@ class MessageHandler
 
         $usedCards = [];
         foreach ($cards as $card) {
+            if (count($card) > GameEntity::NUMBER_OF_CARDS) {
+                throw new \InvalidArgumentException('Too many cards in test game for a player!');
+            }
             $usedCards = array_merge($usedCards, $card);
         }
 
