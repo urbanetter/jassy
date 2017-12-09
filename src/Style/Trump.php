@@ -11,7 +11,7 @@ use function Jass\Trick\playedCards;
 
 class Trump extends TopDown
 {
-    public $name = "Trumpf";
+    public $name = "trump";
 
     public $trumpSuit;
 

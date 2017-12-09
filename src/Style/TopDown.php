@@ -12,7 +12,7 @@ use Jass\Style;
 class TopDown extends Style
 {
 
-    public $name = "Obeabä";
+    public $name = "top down";
 
     /**
      * @param Card $card

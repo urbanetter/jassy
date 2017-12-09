@@ -5,7 +5,7 @@ namespace Jass\Style;
 
 class BottomUp extends TopDown
 {
-    public $name = "Uneufä";
+    public $name = "bottom up";
 
     protected function order()
     {
