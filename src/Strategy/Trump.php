@@ -40,7 +40,7 @@ class Trump implements Strategy
                     $game->style->orderValue($trick->leadingTurn->card) < $game->style->orderValue(Card::from($trump->suit, Card\Value::ACE))
                 ) {
                     $myHighest = highest($trump->hand, $game->style->orderFunction());
-                    if ($game->style->orderValue($myHighest) > $game->style->orderValue($trick->leadingTurn->card)) {
+                    if ($myHighest && $game->style->orderValue($myHighest) > $game->style->orderValue($trick->leadingTurn->card)) {
                         return $myHighest;
                     }
                 }
