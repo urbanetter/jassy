@@ -53,14 +53,17 @@ class TrumpTest extends TestCase
         $sut = new Trump(Card\Suit::ROSE);
 
         $players = byNames('Ueli, Fritz, Susi, Frieda');
-        $hand = [Card::from(Card\Suit::BELL, Card\Value::SIX), Card::from(Card\Suit::ROSE, Card\Value::ACE)];
+        $hand = [
+            Card::from(Card\Suit::BELL, Card\Value::SIX),
+            Card::from(Card\Suit::ROSE, Card\Value::ACE)
+        ];
 
         $trick = new Trick();
         $this->assertTrue($sut->isValidCard($trick, $hand, Card::shortcut('ra')));
 
         addTurn($trick, $players[0], Card::shortcut('ba'));
 
-        $this->assertTrue($sut->isValidCard($trick, $hand, Card::shortcut('ra')));
+        $this->assertFalse($sut->isValidCard($trick, $hand, Card::shortcut('ra')));
 
         addTurn($trick, $players[1], Card::shortcut('ra'));
 

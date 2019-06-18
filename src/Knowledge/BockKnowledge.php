@@ -46,7 +46,7 @@ class BockKnowledge implements Knowledge
             if ($handCards) {
                 $highestHandCard = highest($handCards, $game->style->orderFunction());
                 $byNeededCards = array_reverse(ordered($notPlayed, $game->style->orderFunction()));
-                $knowledge->suitPotential[$suit] = array_search($highestHandCard, $byNeededCards);
+                $knowledge->suitPotential[$suit] = (int)    array_search($highestHandCard, $byNeededCards);
             }
         }
 

@@ -4,7 +4,6 @@ namespace Jass\Message;
 
 
 use Jass\Entity\Card;
-use Jass\Strategy;
 use Jass\Style;
 
 class TestGame implements Message
@@ -12,12 +11,12 @@ class TestGame implements Message
     /** @var Style */
     public $style;
 
-    /** @var  Card[] */
+    /** @var  Card[]|Card[][] cards of first player or cards per player */
     public $cards;
 
-    /** @var  Strategy[] */
+    /** @var  string[] */
     public $strategies;
 
-    /** @var  Strategy[] */
+    /** @var  string[] */
     public $opponentStrategies;
 }

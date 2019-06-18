@@ -31,7 +31,7 @@ class Game
     public $playedTricks = [];
 
     /**
-     * @var Trick
+     * @var Trick|null
      */
     public $currentTrick;
 

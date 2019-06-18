@@ -35,6 +35,7 @@ class Trump implements Strategy
             $teamMate = TeamMateKnowledge::analyze($game);
             if ($trick->isFirst) {
                 if (
+                    $trick->leadingTurn &&
                     $trick->leadingTurn->card->suit === $trump->suit &&
                     $trick->leadingTurn->player === $teamMate->player &&
                     $game->style->orderValue($trick->leadingTurn->card) < $game->style->orderValue(Card::from($trump->suit, Card\Value::ACE))
@@ -51,7 +52,7 @@ class Trump implements Strategy
             $bock = BockKnowledge::analyze($game);
             if (
                 $trump->possibleMatch && // this also means that our team mate was playing the leading turn
-                !in_array($trick->leadingTurn->card, $bock->bockCards) &&
+                $trick->leadingTurn && !in_array($trick->leadingTurn->card, $bock->bockCards) &&
                 $trump->hand
             ) {
                 return highest($trump->hand, $game->style->orderFunction());
@@ -62,6 +63,7 @@ class Trump implements Strategy
             if (
                 $trump->hand &&
                 $bockCards &&
+                $trick->leadingTurn &&
                 !(
                     $trick->leadingTurn->player === $teamMate->player &&
                     in_array($trick->leadingTurn->card, $bock->bockCards)

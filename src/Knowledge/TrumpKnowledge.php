@@ -9,7 +9,6 @@ use Jass\Entity\Trick;
 use function Jass\Hand\suit;
 use Jass\Knowledge;
 use Jass\Style\Trump;
-use function Jass\Trick\leadingTurn;
 use function Jass\Trick\playedCards;
 use function Jass\Trick\winner;
 
@@ -43,10 +42,9 @@ class TrumpKnowledge implements Knowledge
         $knowledge->isTrumpGame = $game->style instanceof Trump;
 
         $firstTrick = $game->playedTricks[0] ?? $game->currentTrick ?? new Trick();
+        $knowledge->choosingTeam = $game->currentPlayer->team;
         if ($firstTrick->turns) {
-            $knowledge->choosingTeam = leadingTurn($firstTrick)->player->team;
-        } else {
-            $knowledge->choosingTeam = $game->currentPlayer->team;
+            $knowledge->choosingTeam = $firstTrick->turns[0]->player->team;
         }
 
         if (!$game->style instanceof Trump) {

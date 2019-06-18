@@ -20,7 +20,7 @@ class TrickKnowledge implements Knowledge
     /** @var  string */
     public $leadingSuit;
 
-    /** @var Turn */
+    /** @var Turn|null */
     public $leadingTurn;
 
     /** @var  int */
@@ -48,7 +48,7 @@ class TrickKnowledge implements Knowledge
         $knowledge->leadingTurnInMyTeam = ($knowledge->playerOfTurn % 2) == 1;
         $knowledge->playedCards = playedCards($trick);
         $knowledge->bestCard = Hand\highest(Hand\suit($knowledge->playedCards, $knowledge->leadingSuit), $game->style->orderFunction());
-        $knowledge->isFirst = count($game->playedTricks) > 0;
+        $knowledge->isFirst = count($game->playedTricks) == 0;
         $knowledge->leadingTurn = leadingTurn($trick);
 
         return $knowledge;

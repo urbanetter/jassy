@@ -8,7 +8,7 @@ class Trick
     /**
      * @var Turn[]
      */
-    public $turns;
+    public $turns = [];
 
     /**
      * @var string

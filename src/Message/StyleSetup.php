@@ -13,7 +13,7 @@ class StyleSetup implements Message
     public $style;
 
     /**
-     * @var string[] new strategies
+     * @var string[][] new strategies per player
      */
     public $strategies;
 }

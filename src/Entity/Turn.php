@@ -22,7 +22,7 @@ class Turn
      * @param Player $player
      * @param Card $card
      */
-    public function __construct(Player $player = null, Card $card = null)
+    public function __construct(Player $player, Card $card)
     {
         $this->player = $player;
         $this->card = $card;

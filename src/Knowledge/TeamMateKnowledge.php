@@ -11,6 +11,7 @@ use function Jass\Player\isInMyTeam;
 use function Jass\Trick\leadingTurn;
 use function Jass\Trick\playedCards;
 use function Jass\Trick\playerTurn;
+use LogicException;
 
 class TeamMateKnowledge implements Knowledge
 {
@@ -32,12 +33,16 @@ class TeamMateKnowledge implements Knowledge
 
         $player = $game->currentPlayer;
         $bock = BockKnowledge::analyze($game);
-        $teamMate = $knowledge->player = teamMate($game, $player);
+        $teamMate = teamMate($game, $player);
+        if (!$teamMate) {
+            throw new LogicException("No team mate in this player setup!");
+        }
+        $knowledge->player = $teamMate;
 
         // no card of a suit = bad suit
         foreach ($game->playedTricks as $trick) {
             $teamMateTurn = playerTurn($trick, $teamMate);
-            if (
+            if ( $teamMateTurn &&
                 $teamMateTurn->card->suit !== $trick->leadingSuit
             ) {
                 $knowledge->badSuits[] = $trick->leadingSuit;
@@ -49,7 +54,7 @@ class TeamMateKnowledge implements Knowledge
         foreach ($game->playedTricks as $trick) {
             $leadingTurn = leadingTurn($trick);
 
-            if (
+            if ( $leadingTurn &&
                 $leadingTurn->player !== $player &&
                 isInMyTeam($player, $leadingTurn->player) &&
                 !$bock->isBockByPlayedCards($leadingTurn->card, $playedCards)
@@ -63,10 +68,16 @@ class TeamMateKnowledge implements Knowledge
         // "verrüere"
         foreach ($game->playedTricks as $trick) {
             $leadingTurn = leadingTurn($trick);
+            if (!$leadingTurn) {
+                continue;
+            }
             if ($leadingTurn->player !== $player) {
                 continue;
             }
             $teamMateTurn = playerTurn($trick, $teamMate);
+            if (!$teamMateTurn) {
+                continue;
+            }
             if ($teamMateTurn->card->suit === $trick->leadingSuit) {
                 continue;
             }
