@@ -34,7 +34,7 @@ class TeamMate implements Strategy
                 $suitsToPlay = array_intersect($handSuits, $teamMate->goodSuits);
                 if (count($suitsToPlay) === 1) {
                     $suit = first($suitsToPlay);
-                    return lowest(suit($player->hand, $suit), $game->style->orderFunction());
+                    return lowest(suit($player->hand, $suit), $game->style->orderFunction())->withHint('I think my teammate wanted this suit.');
                 }
             }
             if ($teamMate->badSuits || $teamMate->tossedSuits) {
@@ -42,25 +42,25 @@ class TeamMate implements Strategy
                 $suitsToPlay = array_intersect($handSuits, $suitsMightBeGood);
                 if (count($suitsToPlay) === 1) {
                     $suit = first($suitsToPlay);
-                    return lowest(suit($player->hand, $suit), $game->style->orderFunction());
+                    return lowest(suit($player->hand, $suit), $game->style->orderFunction())->withHint('My teammate tossed all suits but this one.');
                 }
             }
             if ($suits->suitsOnlyInMyTeam) {
                 $suitsToPlay = array_intersect($handSuits, $suits->suitsOnlyInMyTeam);
                 if (count($suitsToPlay) === 1) {
                     $suit = first($suitsToPlay);
-                    return lowest(suit($player->hand, $suit), $game->style->orderFunction());
+                    return lowest(suit($player->hand, $suit), $game->style->orderFunction())->withHint('I think only my teammate and I have this suit.');
                 }
             }
             // show best suit as good suit to team mate
             if ($bock->suitPotential) {
                 $suit = first(array_keys($bock->suitPotential));
-                return lowest(suit($player->hand, $suit), $game->style->orderFunction());
+                return lowest(suit($player->hand, $suit), $game->style->orderFunction())->withHint('I show to my teammate that this is a good suite.');
             }
         } else {
             if (!canFollowSuit($player->hand, $trick->leadingSuit) && $bock->suitPotential) {
                 $suit = last(array_keys($bock->suitPotential));
-                return lowest(suit($player->hand, $suit), $game->style->orderFunction());
+                return lowest(suit($player->hand, $suit), $game->style->orderFunction())->withHint('I toss this suit.');
             }
 
         }

@@ -2,6 +2,7 @@
 
 namespace Jass\Entity;
 
+use InvalidArgumentException;
 use Jass\Entity\Card\Suit;
 use Jass\Entity\Card\Value;
 
@@ -17,12 +18,23 @@ class Card
      */
     public $value;
 
+    /**
+     * @var string|null
+     */
+    public $hint;
+
+    public function withHint(string $hint) : Card
+    {
+        $this->hint = $hint;
+        return $this;
+    }
+
     public function __toString()
     {
         return $this->suit . " " . $this->value;
     }
 
-    static function from($suit, $value)
+    static function from($suit, $value) : Card
     {
         $result = new Card();
         $result->suit = $suit;
@@ -31,7 +43,7 @@ class Card
         return $result;
     }
 
-    static function shortcut($string)
+    static function shortcut($string) : Card
     {
         $shortcutSuits = [
             'r' => Suit::ROSE,
@@ -57,12 +69,12 @@ class Card
         $value = strtolower(substr($string, 1));
 
         if (!isset($shortcutSuits[$suit])) {
-            throw new \InvalidArgumentException('Unknown suit shortcut: ' . $suit . ' in shortcuts: ' . $string);
+            throw new InvalidArgumentException('Unknown suit shortcut: ' . $suit . ' in shortcuts: ' . $string);
         }
         $suit = $shortcutSuits[$suit];
 
         if (!isset($shortcutValues[$value])) {
-            throw new \InvalidArgumentException('Unknown value shortcut: ' . $value . ' in shortcuts: ' . $string);
+            throw new InvalidArgumentException('Unknown value shortcut: ' . $value . ' in shortcuts: ' . $string);
         }
         $value = $shortcutValues[$value];
 

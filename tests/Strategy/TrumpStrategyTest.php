@@ -47,4 +47,40 @@ class TrumpStrategyTest extends TestCase
         $this->assertNotEquals(Card::shortcut('ra'), $bock->chooseCard($game));
 
     }
+
+    public function testOvertrumpsIfLowerThanAceOnFirstTrick()
+    {
+        $game = testGame(
+            [
+                byShortcuts('sa,r7,r8,rk,oj,sa,sj,b6,b7'),
+                byShortcuts('oq,o10,oa,ok,o9,s7,s8,s9,s10'),
+                byShortcuts('rj,r9,ra,ba,bk,o6,o7,o8,s6'),
+                [] // all the other cards
+            ],
+            new Trump(Suit::ROSE)
+        );
+
+        $strategy = new \Jass\Strategy\Trump();
+
+        $this->assertEquals($strategy->chooseCard($game), Card::shortcut("rk"));
+        playCard($game, 'rk');
+        playCard($game, 's7');
+        $this->assertEquals($strategy->chooseCard($game), Card::shortcut("rj"));
+
+        $game = testGame(
+            [
+                byShortcuts('ra,r7,r8,rk,oj,sa,sj,b6,b7'),
+                byShortcuts('oq,o10,oa,ok,o9,s7,s8,s9,s10'),
+                byShortcuts('rj,r9,sa,ba,bk,o6,o7,o8,s6'),
+                [] // all the other cards
+            ],
+            new Trump(Suit::ROSE)
+        );
+
+        $this->assertEquals($strategy->chooseCard($game), Card::shortcut("ra"));
+        playCard($game, 'ra');
+        playCard($game, 's7');
+        $this->assertNull($strategy->chooseCard($game));
+
+    }
 }

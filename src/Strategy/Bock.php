@@ -23,7 +23,7 @@ class Bock implements Strategy
                     if ($trump->isTrumpGame && !$trump->shouldLeadWithTrump && $card->suit === $trump->suit) {
                         continue;
                     }
-                    return $card;
+                    return $card->withHint('This should be bock.');
                 }
             }
         }

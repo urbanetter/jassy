@@ -16,15 +16,15 @@ class Simple implements Strategy
         $trick = TrickKnowledge::analyze($game);
         $player = $game->currentPlayer;
         if ($trick->canLead) {
-            $card = Hand\highest($player->hand, $game->style->orderFunction());
+            $card = Hand\highest($player->hand, $game->style->orderFunction())->withHint('Just my highest card.');
         } else {
             if (Hand\canFollowSuit($player->hand, $trick->leadingSuit)) {
                 $card = Hand\highest(Hand\suit($player->hand, $trick->leadingSuit), $game->style->orderFunction());
                 if ($game->style->orderValue($trick->bestCard) > $game->style->orderValue($card)) {
-                    $card =  Hand\lowest(Hand\suit($player->hand, $trick->leadingSuit), $game->style->orderFunction());
+                    $card =  Hand\lowest(Hand\suit($player->hand, $trick->leadingSuit), $game->style->orderFunction())->withHint('Lowest card of this suit.');
                 }
             } else {
-                $card = Hand\lowest($player->hand, $game->style->orderFunction());
+                $card = Hand\lowest($player->hand, $game->style->orderFunction())->withHint('Lowest card');
             }
 
         }
