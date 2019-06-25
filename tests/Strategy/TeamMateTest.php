@@ -29,7 +29,7 @@ class TeamMateTest extends TestCase
         $game = playCard($game, 'r6');
 
         $sut = new TeamMate();
-        $actual = $sut->chooseCard($game);
+        $actual = $sut->chooseCard($game)->withoutHint();
         $this->assertEquals(Card::shortcut('s6'), $actual);
 
     }
@@ -45,7 +45,7 @@ class TeamMateTest extends TestCase
             byShortcuts('s8')
         ]);
 
-        $firstCard = $sut->chooseCard($game);
+        $firstCard = $sut->chooseCard($game)->withoutHint();
         $this->assertEquals(Card::shortcut('s9'), $firstCard);
 
         $game = playCard($game, 's10');
@@ -53,7 +53,7 @@ class TeamMateTest extends TestCase
         $game = playCard($game, 'sa');
         $game = playCard($game, 's8');
 
-        $givingBackCard = $sut->chooseCard($game);
+        $givingBackCard = $sut->chooseCard($game)->withoutHint();
         $this->assertEquals(Card::shortcut('s7'), $givingBackCard);
     }
 
@@ -71,7 +71,7 @@ class TeamMateTest extends TestCase
         $game = playCard($game, 'sa');
         $game = playCard($game, 's6');
 
-        $actual = $sut->chooseCard($game);
+        $actual = $sut->chooseCard($game)->withoutHint();
         $this->assertEquals(Suit::OAK, $actual->suit); // toss away oak
 
         $game = playCard($game, 'o6');
@@ -80,14 +80,14 @@ class TeamMateTest extends TestCase
         $game = playCard($game, 'ba');
         $game = playCard($game, 'bk');
 
-        $actual = $sut->chooseCard($game);
+        $actual = $sut->chooseCard($game)->withoutHint();
         $this->assertEquals(Suit::OAK, $actual->suit); // toss away oak
 
         $game = playCard($game, 'o7');
         $game = playCard($game, 'bq');
 
         $sut = new TeamMate();
-        $actual = $sut->chooseCard($game);
+        $actual = $sut->chooseCard($game)->withoutHint();
 
         // player 1 now knows team mate does not have shield and bell
         // since oak is tossed away player 1 should play suit rose

@@ -20,14 +20,14 @@ class SimpleTest extends TestCase
             byShortcuts('r8,r9'),
         ]);
 
-        $this->assertEquals(Card::shortcut('sa'), card($game));
+        $this->assertEquals(Card::shortcut('sa'), card($game)->withoutHint());
 
         playCard($game, Card::shortcut('r6'));
 
-        $this->assertEquals(Card::shortcut('ra'),card($game));
+        $this->assertEquals(Card::shortcut('ra'),card($game)->withoutHint());
 
         playCard($game, Card::shortcut('ra'));
 
-        $this->assertEquals(Card::shortcut('r8'), card($game));
+        $this->assertEquals(Card::shortcut('r8'), card($game)->withoutHint());
     }
 }

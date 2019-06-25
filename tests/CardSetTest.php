@@ -3,6 +3,7 @@
 namespace Tests;
 
 
+use InvalidArgumentException;
 use function Jass\CardSet\byShortcuts;
 use Jass\Entity\Card;
 use PHPUnit\Framework\TestCase;
@@ -29,7 +30,14 @@ class CardSetTest extends TestCase
 
     public function testFailure()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         Card::shortcut('wrong');
+    }
+
+    public function testToShortcut()
+    {
+        $shortcut = 'rj';
+        $card = Card::shortcut($shortcut);
+        $this->assertEquals($shortcut, $card->toShortcut());
     }
 }

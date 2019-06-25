@@ -29,7 +29,7 @@ class BockTest extends TestCase
         $game = playCard($game, 'o7');
         $game = playCard($game, 'o8');
 
-        $this->assertEquals(Card::shortcut('sk'), $sut->chooseCard($game));
+        $this->assertEquals(Card::shortcut('sk'), $sut->chooseCard($game)->withoutHint());
 
     }
 }

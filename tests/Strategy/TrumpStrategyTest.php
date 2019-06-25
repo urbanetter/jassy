@@ -31,20 +31,20 @@ class TrumpStrategyTest extends TestCase
         $simple = new Simple();
         $bock = new Bock();
 
-        $this->assertEquals($strategy->chooseCard($game), Card::shortcut('rj'));
+        $this->assertEquals($strategy->chooseCard($game)->withoutHint(), Card::shortcut('rj'));
         playCard($game, 'rj');
         playCard($game, 'r10');
         playCard($game, 'r6');
-        playCard($game, $simple->chooseCard($game));
+        playCard($game, $simple->chooseCard($game)->withoutHint());
 
-        $this->assertEquals($strategy->chooseCard($game), Card::shortcut('r9'));
+        $this->assertEquals($strategy->chooseCard($game)->withoutHint(), Card::shortcut('r9'));
         playCard($game, 'r9');
         playCard($game, 'rq');
         playCard($game, 'r7');
-        playCard($game, $simple->chooseCard($game));
+        playCard($game, $simple->chooseCard($game)->withoutHint());
 
         $this->assertNull($strategy->chooseCard($game));
-        $this->assertNotEquals(Card::shortcut('ra'), $bock->chooseCard($game));
+        $this->assertNotEquals(Card::shortcut('ra'), $bock->chooseCard($game)->withoutHint());
 
     }
 
@@ -62,10 +62,10 @@ class TrumpStrategyTest extends TestCase
 
         $strategy = new \Jass\Strategy\Trump();
 
-        $this->assertEquals($strategy->chooseCard($game), Card::shortcut("rk"));
+        $this->assertEquals($strategy->chooseCard($game)->withoutHint(), Card::shortcut("rk"));
         playCard($game, 'rk');
         playCard($game, 's7');
-        $this->assertEquals($strategy->chooseCard($game), Card::shortcut("rj"));
+        $this->assertEquals($strategy->chooseCard($game)->withoutHint(), Card::shortcut("rj"));
 
         $game = testGame(
             [
@@ -77,7 +77,7 @@ class TrumpStrategyTest extends TestCase
             new Trump(Suit::ROSE)
         );
 
-        $this->assertEquals($strategy->chooseCard($game), Card::shortcut("ra"));
+        $this->assertEquals($strategy->chooseCard($game)->withoutHint(), Card::shortcut("ra"));
         playCard($game, 'ra');
         playCard($game, 's7');
         $this->assertNull($strategy->chooseCard($game));
