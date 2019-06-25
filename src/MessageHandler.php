@@ -119,7 +119,7 @@ class MessageHandler
         }
 
         $player = $game->currentPlayer;
-        $card = $turn->card;
+        $card = $turn->card->withoutHint();
         $trick = $game->currentTrick = $game->currentTrick ?? new TrickEntity();
 
         if (!in_array($card, $player->hand)) {
