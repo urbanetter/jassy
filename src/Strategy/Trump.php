@@ -27,7 +27,7 @@ class Trump implements Strategy
         $trick = TrickKnowledge::analyze($game);
 
         if ($trick->canLead) {
-            if ($trump->shouldLeadWithTrump) {
+            if ($trump->hand && $trump->shouldLeadWithTrump) {
                 return highest(suit($player->hand, $trump->suit), $game->style->orderFunction())->withHint('Can lead and should lead with a trump.');
             }
             return null;
