@@ -4,6 +4,7 @@ namespace Jass\Style;
 
 use Jass\Entity\Card;
 use Jass\Entity\Card\Value;
+use Jass\Entity\Trick;
 
 class Trump extends TopDown
 {
@@ -56,4 +57,13 @@ class Trump extends TopDown
 
         return isset($points[$card->value]) ? $points[$card->value] : 0;
     }
+
+    public function isValidCard(Trick $trick, $hand, Card $card) : bool
+    {
+        if ($card->suit == $this->trumpSuit) {
+            return true; // trump cards are always valid
+        }
+        return parent::isValidCard($trick, $hand, $card);
+    }
+
 }
