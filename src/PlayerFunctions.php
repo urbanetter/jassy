@@ -3,16 +3,17 @@
 namespace Jass\Player;
 
 use Jass\Entity\Player;
+use LogicException;
 
 /**
  * @param $names
  * @return Player[]
  */
-function byNames(string $names)
+function byNames(string $names) : array
 {
     $names = explode(',', $names);
     if (!count($names) == 4) {
-        throw new \LogicException('4 names separarated by comma needed');
+        throw new LogicException('4 names separarated by comma needed');
     }
 
     $result = [];
@@ -36,12 +37,10 @@ function isInMyTeam(Player $myself, Player $other) : bool
     return $myself->team == $other->team;
 }
 
-function nextPlayer(Player $player, $players) : Player
+function nextPlayer(Player $player, array $players) : Player
 {
-    $index = array_search($player, $players);
-    if ($index == count($players) - 1) {
-        return $players[0];
-    } else {
-        return $players[$index + 1];
-    }
+    $index = (int) array_search($player, $players);
+    $index = ($index == count($players) - 1) ? 0 : $index + 1;
+
+    return $players[$index];
 }

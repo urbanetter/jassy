@@ -4,13 +4,14 @@ namespace Jass\Hand;
 
 
 use Jass\Entity\Card;
+use LogicException;
 
 /**
  * @param Card[] $hand
  * @param string $suit
  * @return Card[]
  */
-function suit($hand, $suit)
+function suit(array $hand, string $suit) : array
 {
     return array_filter($hand, function(Card $card) use ($suit){
         return $card->suit == $suit;
@@ -22,7 +23,7 @@ function suit($hand, $suit)
  * @param string $suit
  * @return bool
  */
-function canFollowSuit($hand, $suit)
+function canFollowSuit(array $hand, string $suit) : bool
 {
     return count(suit($hand, $suit)) > 0;
 }
@@ -32,7 +33,7 @@ function canFollowSuit($hand, $suit)
  * @param Callable $orderFunction
  * @return Card
  */
-function lowest($hand, $orderFunction)
+function lowest(array $hand, Callable $orderFunction) : Card
 {
     return array_reduce($hand, function($lowest, $card) use ($orderFunction) {
         if (!$lowest || $orderFunction($card) < $orderFunction($lowest)) {
@@ -48,7 +49,7 @@ function lowest($hand, $orderFunction)
  * @param Callable $orderFunction
  * @return Card
  */
-function highest($hand, Callable $orderFunction)
+function highest(array $hand, Callable $orderFunction) : Card
 {
     return array_reduce($hand, function($highest, $card) use ($orderFunction) {
         if (!$highest || $orderFunction($card) > $orderFunction($highest)) {
@@ -64,7 +65,7 @@ function highest($hand, Callable $orderFunction)
  * @param Callable $orderFunction
  * @return Card[]
  */
-function ordered($hand, Callable $orderFunction)
+function ordered(array $hand, Callable $orderFunction) : array
 {
     $suits = suits($hand);
     $result = [];
@@ -90,7 +91,11 @@ function last($array)
     return ($array && is_array($array)) ? array_slice($array, -1)[0] : null;
 }
 
-function suits($hand)
+/**
+ * @param Card[] $hand
+ * @return string[]
+ */
+function suits(array $hand) : array
 {
     $suits = array_map(function (Card $card) {
         return $card->suit;
@@ -104,7 +109,7 @@ function suits($hand)
  * @param Card $played
  * @return Card[]
  */
-function playCardOfHand($hand, Card $played)
+function playCardOfHand(array $hand, Card $played) : array
 {
     $result = [];
     foreach ($hand as $card) {
@@ -114,7 +119,7 @@ function playCardOfHand($hand, Card $played)
     }
 
     if (count($hand) == count($result)) {
-        throw new \LogicException('Card ' . $played . ' is not in hand');
+        throw new LogicException('Card ' . $played . ' is not in hand');
     }
 
     return $result;

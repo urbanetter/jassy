@@ -46,7 +46,7 @@ class BockKnowledge implements Knowledge
             if ($handCards) {
                 $highestHandCard = highest($handCards, $game->style->orderFunction());
                 $byNeededCards = array_reverse(ordered($notPlayed, $game->style->orderFunction()));
-                $knowledge->suitPotential[$suit] = (int)    array_search($highestHandCard, $byNeededCards);
+                $knowledge->suitPotential[$suit] = (int)  array_search($highestHandCard, $byNeededCards);
             }
         }
 
@@ -62,7 +62,7 @@ class BockKnowledge implements Knowledge
      * @param Card[] $playedCards
      * @return bool
      */
-    public function isBockByPlayedCards(Card $candidate, $playedCards)
+    public function isBockByPlayedCards(Card $candidate, array $playedCards) : bool
     {
         $allCards = bySuit($candidate->suit);
         $notPlayed = array_diff($allCards, suit($playedCards, $candidate->suit));
@@ -70,7 +70,11 @@ class BockKnowledge implements Knowledge
         return highest($notPlayed, $this->orderFunction) === $candidate;
     }
 
-    public function bockWithTrick(Trick $trick)
+    /**
+     * @param Trick $trick
+     * @return Card[] bock card by suit
+     */
+    public function bockWithTrick(Trick $trick) : array
     {
         $playedCards = array_merge($this->playedCards, playedCards($trick));
 

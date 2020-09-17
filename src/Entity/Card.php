@@ -59,7 +59,7 @@ class Card
         return $this->suit . " " . $this->value;
     }
 
-    public function toShortcut()
+    public function toShortcut() : string
     {
         return array_flip(self::SHORTCUT_SUITS)[$this->suit] . array_flip(self::SHORTCUT_VALUES)[$this->value];
     }

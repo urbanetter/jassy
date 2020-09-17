@@ -38,7 +38,7 @@ class TrickKnowledge implements Knowledge
     /** @var bool */
     public $isFirst;
 
-    static public function analyze(Game $game) : TrickKnowledge
+    static public function analyze(Game $game)
     {
         $knowledge = new TrickKnowledge();
         $trick = $game->currentTrick ?? new Trick();

@@ -7,7 +7,8 @@ use Jass\Entity\Card;
 use Jass\Entity\Card\Suit;
 use Jass\Entity\Card\Value;
 
-function jassSet()
+/** @return Card[] */
+function jassSet() : array
 {
     $suits = suits();
     $values = values();
@@ -15,7 +16,12 @@ function jassSet()
     return bySuitsAndValues($suits, $values);
 }
 
-function bySuitsAndValues($suits, $values)
+/**
+ * @param array $suits
+ * @param array $values
+ * @return Card[]
+ */
+function bySuitsAndValues(array $suits, array $values) : array
 {
     $cards = [];
     foreach ($suits as $suit) {
@@ -31,27 +37,37 @@ function bySuitsAndValues($suits, $values)
     return $cards;
 }
 
-function suits()
+/** @return string[] */
+function suits() : array
 {
     return [Suit::ROSE, Suit::BELL, Suit::OAK, Suit::SHIELD];
 }
 
-function bySuit($suit)
+/**
+ * @param string $suit
+ * @return Card[]
+ */
+function bySuit(string $suit) : array
 {
     return bySuitsAndValues([$suit], values());
 }
 
-function values()
+/** @return string[] */
+function values() : array
 {
     return [Value::SIX, Value::SEVEN, Value::EIGHT, Value::NINE, Value::TEN, Value::JACK, Value::QUEEN, Value::KING, Value::ACE];
 }
 
-function isValidCard(Card $card)
+function isValidCard(Card $card) : bool
 {
     return (in_array($card->suit, suits()) && in_array($card->value, values()));
 }
 
-function byShortcuts($string)
+/**
+ * @param string $string
+ * @return Card[]
+ */
+function byShortcuts(string $string) : array
 {
     $cards = explode(",", $string);
     $result = [];
