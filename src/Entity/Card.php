@@ -64,7 +64,7 @@ class Card
         return array_flip(self::SHORTCUT_SUITS)[$this->suit] . array_flip(self::SHORTCUT_VALUES)[$this->value];
     }
 
-    static function from($suit, $value) : Card
+    static function from(string $suit, string $value) : Card
     {
         $result = new Card();
         $result->suit = $suit;
@@ -73,7 +73,7 @@ class Card
         return $result;
     }
 
-    static function shortcut($string) : Card
+    static function shortcut(string $string) : Card
     {
         $string = trim($string);
         $suit = strtolower(substr($string, 0, 1));

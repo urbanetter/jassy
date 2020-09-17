@@ -25,7 +25,10 @@ abstract class Style
         return [$this, "points"];
     }
 
-    abstract public function isValidCard(Trick $trick, $hand, Card $card) : bool;
+    /**
+     * @param Card[] $hand
+     */
+    abstract public function isValidCard(Trick $trick, array $hand, Card $card) : bool;
 
     public function __toString()
     {
