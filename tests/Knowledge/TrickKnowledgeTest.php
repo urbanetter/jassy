@@ -79,6 +79,6 @@ class TrickKnowledgeTest extends TestCase
         $this->assertEquals(1, $actual->playerOfTurn);
         $this->assertFalse($actual->isFirst);
 
-
     }
+
 }
