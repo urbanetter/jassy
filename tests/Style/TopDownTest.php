@@ -47,5 +47,7 @@ class TopDownTest extends TestCase
         addTurn($trick, $players[0], Card::shortcut('ba'));
 
         $this->assertFalse($sut->isValidCard($trick, $hand, Card::shortcut('ra')));
+
+        $this->assertFalse($sut->isValidCard($trick, $hand, Card::shortcut('ba')));
     }
 }

@@ -63,7 +63,8 @@ class TrumpTest extends TestCase
 
         addTurn($trick, $players[0], Card::shortcut('ba'));
 
-        $this->assertFalse($sut->isValidCard($trick, $hand, Card::shortcut('ra')));
+        // this is still true because rose is trump
+        $this->assertTrue($sut->isValidCard($trick, $hand, Card::shortcut('ra')));
 
         addTurn($trick, $players[1], Card::shortcut('ra'));
 

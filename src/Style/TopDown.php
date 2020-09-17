@@ -45,6 +45,9 @@ class TopDown extends Style
 
     public function isValidCard(Trick $trick, $hand, Card $card) : bool
     {
+        if (!in_array($card, $hand)) {
+            return false;
+        }
         if ($trick->leadingSuit) {
             if (Hand\canFollowSuit($hand, $trick->leadingSuit)) {
                 return $card->suit == $trick->leadingSuit;

@@ -60,7 +60,7 @@ class Trump extends TopDown
 
     public function isValidCard(Trick $trick, $hand, Card $card) : bool
     {
-        if ($card->suit == $this->trumpSuit) {
+        if (in_array($card, $hand) && $card->suit == $this->trumpSuit) {
             return true; // trump cards are always valid
         }
         return parent::isValidCard($trick, $hand, $card);
