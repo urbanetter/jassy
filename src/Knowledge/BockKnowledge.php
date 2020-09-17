@@ -83,7 +83,9 @@ class BockKnowledge implements Knowledge
             $allCards = bySuit($suit);
             $notPlayed = array_diff($allCards, suit($playedCards, $suit));
 
-            $result[$suit] = highest($notPlayed, $this->orderFunction);
+            if ($notPlayed) {
+                $result[$suit] = highest($notPlayed, $this->orderFunction);
+            }
         }
         return $result;
     }
