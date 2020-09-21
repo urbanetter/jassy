@@ -56,7 +56,7 @@ class Card
 
     public function __toString()
     {
-        return $this->suit . " " . $this->value;
+        return ($this->suit && $this->value) ? $this->suit . " " . $this->value : '';
     }
 
     public function toShortcut() : string
