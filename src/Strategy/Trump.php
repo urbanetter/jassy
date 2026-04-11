@@ -28,7 +28,7 @@ class Trump implements Strategy
 
         if ($trick->canLead) {
             if ($trump->hand && $trump->shouldLeadWithTrump) {
-                return highest(suit($player->hand, $trump->suit), $game->style->orderFunction())->withHint('Can lead and should lead with a trump.');
+                return highest(suit($player->hand, $trump->suit), $game->style)->withHint('Can lead and should lead with a trump.');
             }
             return null;
         } else {
@@ -40,7 +40,7 @@ class Trump implements Strategy
                     $trick->leadingTurn->player === $teamMate->player &&
                     $game->style->orderValue($trick->leadingTurn->card) < $game->style->orderValue(Card::from($trump->suit, Card\Value::ACE))
                 ) {
-                    $myHighest = highest($trump->hand, $game->style->orderFunction());
+                    $myHighest = highest($trump->hand, $game->style);
                     if ($myHighest && $game->style->orderValue($myHighest) > $game->style->orderValue($trick->leadingTurn->card)) {
                         return $myHighest->withHint('My teammates first trump seems too low and I have a higher one.');
                     }
@@ -55,7 +55,7 @@ class Trump implements Strategy
                 $trick->leadingTurn && !in_array($trick->leadingTurn->card, $bock->bockCards) &&
                 $trump->hand
             ) {
-                return highest($trump->hand, $game->style->orderFunction())->withHint('The card of my teammate is no bock, but we can still win the match and I have trumps!');
+                return highest($trump->hand, $game->style)->withHint('The card of my teammate is no bock, but we can still win the match and I have trumps!');
             }
 
             // if we have a bock card after winning this we try to win the trick
@@ -69,7 +69,7 @@ class Trump implements Strategy
                     in_array($trick->leadingTurn->card, $bock->bockCards)
                 )
             ) {
-                return highest($trump->hand, $game->style->orderFunction())->withHint('After this card, I have a bock, so I overtrump it.');
+                return highest($trump->hand, $game->style)->withHint('After this card, I have a bock, so I overtrump it.');
             }
 
             return null;

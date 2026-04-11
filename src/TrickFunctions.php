@@ -7,6 +7,7 @@ use Jass\Entity\Game;
 use Jass\Entity\Player;
 use Jass\Entity\Trick;
 use Jass\Entity\Turn;
+use Jass\Style;
 use LogicException;
 
 function isFinished(Trick $trick) : bool
@@ -14,18 +15,18 @@ function isFinished(Trick $trick) : bool
     return count($trick->turns) == Game::NUMBER_OF_PLAYERS;
 }
 
-function winner(Trick $trick, Callable $orderFunction) : Player
+function winner(Trick $trick, Style $style) : Player
 {
-    return winningTurn($trick, $orderFunction)->player;
+    return winningTurn($trick, $style)->player;
 }
 
-function winningTurn(Trick $trick, Callable $orderFunction) : Turn
+function winningTurn(Trick $trick, Style $style) : Turn
 {
-    return array_reduce($trick->turns, function ($winning, $turn) use ($orderFunction, $trick) {
+    return array_reduce($trick->turns, function ($winning, $turn) use ($style, $trick) {
         if (!$winning) {
             return $turn;
         }
-        if ($orderFunction($turn->card, $trick->leadingSuit) > $orderFunction($winning->card, $trick->leadingSuit)) {
+        if ($style->orderValue($turn->card, $trick->leadingSuit) > $style->orderValue($winning->card, $trick->leadingSuit)) {
             return $turn;
         } else {
             return $winning;
@@ -52,10 +53,10 @@ function playedCards(Trick $trick) : array
     return ($trick->turns) ? array_map(fn(Turn $turn) => $turn->card, $trick->turns) : [];
 }
 
-function points(Trick $trick, Callable $pointFunction) : int
+function points(Trick $trick, Style $style) : int
 {
-    return array_reduce(playedCards($trick), function($value, Card $card) use ($pointFunction) {
-        return $value + $pointFunction($card);
+    return array_reduce(playedCards($trick), function($value, Card $card) use ($style) {
+        return $value + $style->points($card);
     }, 0);
 }
 

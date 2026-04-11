@@ -43,7 +43,7 @@ class TrickKnowledge implements Knowledge
         $knowledge->playedCards = playedCards($trick);
 
         $candidates = ($knowledge->leadingSuit) ? Hand\suit($knowledge->playedCards, $knowledge->leadingSuit) : $knowledge->playedCards;
-        $knowledge->bestCard = $candidates ? Hand\highest($candidates, $game->style->orderFunction()) : null;
+        $knowledge->bestCard = $candidates ? Hand\highest($candidates, $game->style) : null;
 
         $knowledge->isFirst = count($game->playedTricks) == 0;
         $knowledge->leadingTurn = leadingTurn($trick);

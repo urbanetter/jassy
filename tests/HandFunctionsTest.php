@@ -23,10 +23,10 @@ class HandFunctionsTest extends TestCase
 
         $hand = bySuitsAndValues([Suit::BELL], values());
 
-        $lowest = lowest($hand, $style->orderFunction());
+        $lowest = lowest($hand, $style);
         $this->assertEquals(Card::from(Suit::BELL, Value::SIX), $lowest);
 
-        $highest = highest($hand, $style->orderFunction());
+        $highest = highest($hand, $style);
         $this->assertEquals(Card::from(Suit::BELL, Value::ACE), $highest);
     }
 
