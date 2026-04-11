@@ -5,23 +5,9 @@ namespace Jass\Entity;
 
 class Turn
 {
+    public Player $player;
+    public Card $card;
 
-
-    /**
-     * @var Player
-     */
-    public $player;
-
-    /**
-     * @var Card
-     */
-    public $card;
-
-    /**
-     * Turn constructor.
-     * @param Player $player
-     * @param Card $card
-     */
     public function __construct(Player $player, Card $card)
     {
         $this->player = $player;

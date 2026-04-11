@@ -2,92 +2,64 @@
 
 namespace Jass\Entity;
 
-use InvalidArgumentException;
 use Jass\Entity\Card\Suit;
 use Jass\Entity\Card\Value;
 
-class Card
+readonly class Card
 {
-    const SHORTCUT_SUITS = [
-        'r' => Suit::ROSE,
-        'b' => Suit::BELL,
-        'o' => Suit::OAK,
-        's' => Suit::SHIELD,
-    ];
-    const SHORTCUT_VALUES = [
-        '6' => Value::SIX,
-        '7' => Value::SEVEN,
-        '8' => Value::EIGHT,
-        '9' => Value::NINE,
-        '10' => Value::TEN,
-        'j' => Value::JACK,
-        'q' => Value::QUEEN,
-        'k' => Value::KING,
-        'a' => Value::ACE
-    ];
-
-
-    /**
-     * @var string
-     */
-    public $suit;
-
-    /**
-     * @var string
-     */
-    public $value;
-
-    /**
-     * @var string|null
-     */
-    public $hint;
+    public function __construct(
+        public Suit $suit,
+        public Value $value,
+        public ?string $hint = null,
+    ) {
+    }
 
     public function withHint(string $hint) : Card
     {
-        $this->hint = $hint;
-        return $this;
+        return clone($this, ['hint' => $hint]);
     }
 
     public function withoutHint() : Card
     {
-        $this->hint = null;
-        return $this;
+        return clone($this, ['hint' => null]);
     }
 
-    public function __toString()
+    public function __toString() : string
     {
-        return ($this->suit && $this->value) ? $this->suit . " " . $this->value : '';
+        return $this->suit->label() . " " . $this->value->label();
     }
 
     public function toShortcut() : string
     {
-        return array_flip(self::SHORTCUT_SUITS)[$this->suit] . array_flip(self::SHORTCUT_VALUES)[$this->value];
+        return $this->suit->value . $this->value->value;
     }
 
-    static function from(string $suit, string $value) : Card
+    public function __serialize() : array
     {
-        $result = new Card();
-        $result->suit = $suit;
-        $result->value = $value;
+        return [
+            'suit' => $this->suit,
+            'value' => $this->value,
+            'hint' => $this->hint,
+        ];
+    }
 
-        return $result;
+    public function __unserialize(array $data) : void
+    {
+        $this->suit = $data['suit'] instanceof Suit ? $data['suit'] : Suit::fromLabel($data['suit']);
+        $this->value = $data['value'] instanceof Value ? $data['value'] : Value::fromLabel($data['value']);
+        $this->hint = $data['hint'] ?? null;
+    }
+
+    static function from(Suit $suit, Value $value) : Card
+    {
+        return new Card($suit, $value);
     }
 
     static function shortcut(string $string) : Card
     {
         $string = trim($string);
-        $suit = strtolower(substr($string, 0, 1));
-        $value = strtolower(substr($string, 1));
-
-        if (!isset(self::SHORTCUT_SUITS[$suit])) {
-            throw new InvalidArgumentException('Unknown suit shortcut: ' . $suit . ' in shortcuts: ' . $string);
-        }
-        $suit = self::SHORTCUT_SUITS[$suit];
-
-        if (!isset(self::SHORTCUT_VALUES[$value])) {
-            throw new InvalidArgumentException('Unknown value shortcut: ' . $value . ' in shortcuts: ' . $string);
-        }
-        $value = self::SHORTCUT_VALUES[$value];
+        $suit = Suit::from(strtolower(substr($string, 0, 1)));
+        $value = Value::from(strtolower(substr($string, 1)));
 
         return self::from($suit, $value);
     }

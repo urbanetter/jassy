@@ -35,17 +35,12 @@ function winningTurn(Trick $trick, Callable $orderFunction) : Turn
 
 function playerTurn(Trick $trick, Player $player) : ?Turn
 {
-    foreach ($trick->turns as $turn) {
-        if ($turn->player === $player) {
-            return $turn;
-        }
-    }
-    return null;
+    return array_find($trick->turns, fn (Turn $turn) => $turn->player === $player);
 }
 
 function leadingTurn(Trick $trick) : ?Turn
 {
-    return $trick->turns[0] ?? null;
+    return array_first($trick->turns);
 }
 
 /**
@@ -54,9 +49,7 @@ function leadingTurn(Trick $trick) : ?Turn
  */
 function playedCards(Trick $trick) : array
 {
-    return ($trick->turns) ? array_map(function($turn) {
-        return $turn->card;
-    }, $trick->turns) : [];
+    return ($trick->turns) ? array_map(fn(Turn $turn) => $turn->card, $trick->turns) : [];
 }
 
 function points(Trick $trick, Callable $pointFunction) : int
@@ -73,7 +66,7 @@ function addTurn(Trick $trick, Player $player, Card $card) : Trick
     }
 
     $trick->turns[] = new Turn($player, $card);
-    if (!$trick->leadingSuit) {
+    if ($trick->leadingSuit === null) {
         $trick->leadingSuit = $card->suit;
     }
 

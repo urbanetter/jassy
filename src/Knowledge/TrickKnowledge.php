@@ -4,6 +4,7 @@ namespace Jass\Knowledge;
 
 
 use Jass\Entity\Card;
+use Jass\Entity\Card\Suit;
 use Jass\Entity\Game;
 use Jass\Entity\Trick;
 use Jass\Entity\Turn;
@@ -14,29 +15,22 @@ use function Jass\Trick\playedCards;
 
 class TrickKnowledge implements Knowledge
 {
-    /** @var  bool */
-    public $canLead;
+    public bool $canLead;
 
-    /** @var  string */
-    public $leadingSuit;
+    public ?Suit $leadingSuit;
 
-    /** @var Turn|null */
-    public $leadingTurn;
+    public ?Turn $leadingTurn;
 
-    /** @var  int */
-    public $playerOfTurn;
+    public int $playerOfTurn;
 
-    /** @var  bool */
-    public $leadingTurnInMyTeam;
+    public bool $leadingTurnInMyTeam;
 
     /** @var  Card[] */
-    public $playedCards;
+    public array $playedCards;
 
-    /** @var  ?Card */
-    public $bestCard;
+    public ?Card $bestCard;
 
-    /** @var bool */
-    public $isFirst;
+    public bool $isFirst;
 
     static public function analyze(Game $game)
     {

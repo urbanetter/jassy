@@ -3,15 +3,14 @@
 namespace Jass\Entity;
 
 
+use Jass\Entity\Card\Suit;
+
 class Trick
 {
     /**
      * @var Turn[]
      */
-    public $turns = [];
+    public array $turns = [];
 
-    /**
-     * @var string
-     */
-    public $leadingSuit;
+    public ?Suit $leadingSuit = null;
 }

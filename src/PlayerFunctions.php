@@ -6,7 +6,7 @@ use Jass\Entity\Player;
 use LogicException;
 
 /**
- * @param $names
+ * @param string $names
  * @return Player[]
  */
 function byNames(string $names) : array

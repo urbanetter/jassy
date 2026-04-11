@@ -5,9 +5,10 @@ namespace Jass\Style;
 
 class BottomUp extends TopDown
 {
-    public $name = "bottom up";
+    public string $name = "bottom up";
 
-    protected function order()
+    #[\Override]
+    protected function order(): array
     {
         return array_reverse(parent::order());
     }

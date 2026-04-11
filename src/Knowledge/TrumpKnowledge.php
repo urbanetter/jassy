@@ -4,6 +4,7 @@ namespace Jass\Knowledge;
 
 
 use Jass\Entity\Card;
+use Jass\Entity\Card\Suit;
 use Jass\Entity\Game;
 use Jass\Entity\Trick;
 use function Jass\Hand\suit;
@@ -14,26 +15,21 @@ use function Jass\Trick\winner;
 
 class TrumpKnowledge implements Knowledge
 {
-    /** @var bool */
-    public $isTrumpGame;
+    public bool $isTrumpGame;
 
-    /** @var string */
-    public $choosingTeam;
+    public string $choosingTeam;
 
     /** @var Card[] */
-    public $played = [];
+    public array $played = [];
 
-    /** @var bool */
-    public $shouldLeadWithTrump;
+    public bool $shouldLeadWithTrump;
 
-    /** @var string */
-    public $suit;
+    public Suit $suit;
 
     /** @var Card[] */
-    public $hand;
+    public array $hand;
 
-    /** @var bool */
-    public $possibleMatch;
+    public bool $possibleMatch;
 
     static public function analyze(Game $game)
     {

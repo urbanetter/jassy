@@ -9,10 +9,7 @@ class PlayerSetup implements Message
     /**
      * @var Player[]
      */
-    public $players;
+    public array $players = [];
 
-    /**
-     * @var Player
-     */
-    public $starter;
+    public ?Player $starter = null;
 }

@@ -10,34 +10,22 @@ class Game
     const NUMBER_OF_CARDS = 9;
     const NUMBER_OF_PLAYERS = 4;
 
-    /**
-     * @var string
-     */
-    public $name;
+    public ?string $name = null;
 
     /**
      * @var Player[]
      */
-    public $players = [];
+    public array $players = [];
 
-    /**
-     * @var Style
-     */
-    public $style;
+    public ?Style $style = null;
 
     /**
      * @var Trick[]
      */
-    public $playedTricks = [];
+    public array $playedTricks = [];
 
-    /**
-     * @var Trick|null
-     */
-    public $currentTrick;
+    public ?Trick $currentTrick = null;
 
-    /**
-     * @var Player
-     */
-    public $currentPlayer;
+    public ?Player $currentPlayer = null;
 
 }

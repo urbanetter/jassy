@@ -7,13 +7,10 @@ use Jass\Style;
 
 class StyleSetup implements Message
 {
-    /**
-     * @var Style
-     */
-    public $style;
+    public ?Style $style = null;
 
     /**
      * @var string[][] new strategies per player
      */
-    public $strategies;
+    public array $strategies = [];
 }

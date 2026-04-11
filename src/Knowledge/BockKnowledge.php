@@ -17,10 +17,10 @@ use Jass\Entity\Card;
 class BockKnowledge implements Knowledge
 {
     /** @var  Card[] */
-    public $bockCards = [];
+    public array $bockCards = [];
 
     /** @var int[] how many cards need to be played until there is a bock card */
-    public $suitPotential = [];
+    public array $suitPotential = [];
 
     private $orderFunction;
 
@@ -40,13 +40,13 @@ class BockKnowledge implements Knowledge
             $allCards = bySuit($suit);
             $notPlayed = array_diff($allCards, suit($playedCards, $suit));
 
-            $knowledge->bockCards[$suit] = $notPlayed ? highest($notPlayed, $game->style->orderFunction()) : null;
+            $knowledge->bockCards[$suit->name] = $notPlayed ? highest($notPlayed, $game->style->orderFunction()) : null;
 
             $handCards = suit($game->currentPlayer->hand, $suit);
             if ($handCards) {
                 $highestHandCard = highest($handCards, $game->style->orderFunction());
                 $byNeededCards = array_reverse(ordered($notPlayed, $game->style->orderFunction()));
-                $knowledge->suitPotential[$suit] = (int) array_search($highestHandCard, $byNeededCards);
+                $knowledge->suitPotential[$suit->name] = (int) array_search($highestHandCard, $byNeededCards);
             }
         }
 
@@ -84,7 +84,7 @@ class BockKnowledge implements Knowledge
             $notPlayed = array_diff($allCards, suit($playedCards, $suit));
 
             if ($notPlayed) {
-                $result[$suit] = highest($notPlayed, $this->orderFunction);
+                $result[$suit->name] = highest($notPlayed, $this->orderFunction);
             }
         }
         return $result;

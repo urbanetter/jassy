@@ -3,6 +3,7 @@
 namespace Jass\Strategy;
 
 use Jass\Entity\Card;
+use Jass\Entity\Card\Suit;
 use Jass\Entity\Game;
 use function Jass\Hand\canFollowSuit;
 use function Jass\Hand\first;
@@ -29,24 +30,25 @@ class TeamMate implements Strategy
         $player = $game->currentPlayer;
         $allSuits = \Jass\CardSet\suits();
         $handSuits = suits($player->hand);
+        $suitComparator = fn (Suit $left, Suit $right) => $left->name <=> $right->name;
         if ($trick->canLead) {
             if ($teamMate->goodSuits) {
-                $suitsToPlay = array_intersect($handSuits, $teamMate->goodSuits);
+                $suitsToPlay = array_uintersect($handSuits, $teamMate->goodSuits, $suitComparator);
                 if (count($suitsToPlay) === 1) {
                     $suit = first($suitsToPlay);
                     return lowest(suit($player->hand, $suit), $game->style->orderFunction())->withHint('I think my teammate wanted this suit.');
                 }
             }
             if ($teamMate->badSuits || $teamMate->tossedSuits) {
-                $suitsMightBeGood = array_diff($allSuits, $teamMate->badSuits, $teamMate->tossedSuits);
-                $suitsToPlay = array_intersect($handSuits, $suitsMightBeGood);
+                $suitsMightBeGood = array_udiff($allSuits, $teamMate->badSuits, $teamMate->tossedSuits, $suitComparator);
+                $suitsToPlay = array_uintersect($handSuits, $suitsMightBeGood, $suitComparator);
                 if (count($suitsToPlay) === 1) {
                     $suit = first($suitsToPlay);
                     return lowest(suit($player->hand, $suit), $game->style->orderFunction())->withHint('My teammate tossed all suits but this one.');
                 }
             }
             if ($suits->suitsOnlyInMyTeam) {
-                $suitsToPlay = array_intersect($handSuits, $suits->suitsOnlyInMyTeam);
+                $suitsToPlay = array_uintersect($handSuits, $suits->suitsOnlyInMyTeam, $suitComparator);
                 if (count($suitsToPlay) === 1) {
                     $suit = first($suitsToPlay);
                     return lowest(suit($player->hand, $suit), $game->style->orderFunction())->withHint('I think only my teammate and I have this suit.');
@@ -54,12 +56,12 @@ class TeamMate implements Strategy
             }
             // show best suit as good suit to team mate
             if ($bock->suitPotential) {
-                $suit = first(array_keys($bock->suitPotential));
+                $suit = Suit::fromName(first(array_keys($bock->suitPotential)));
                 return lowest(suit($player->hand, $suit), $game->style->orderFunction())->withHint('I show to my teammate that this is a good suite.');
             }
         } else {
             if (!canFollowSuit($player->hand, $trick->leadingSuit) && $bock->suitPotential) {
-                $suit = last(array_keys($bock->suitPotential));
+                $suit = Suit::fromName(last(array_keys($bock->suitPotential)));
                 return lowest(suit($player->hand, $suit), $game->style->orderFunction())->withHint('I toss this suit.');
             }
 

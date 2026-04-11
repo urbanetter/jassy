@@ -8,15 +8,14 @@ use Jass\Style;
 
 class TestGame implements Message
 {
-    /** @var Style */
-    public $style;
+    public ?Style $style = null;
 
     /** @var  Card[]|Card[][] cards of first player or cards per player */
-    public $cards;
+    public array $cards = [];
 
     /** @var  string[] */
-    public $strategies;
+    public ?array $strategies = null;
 
     /** @var  string[] */
-    public $opponentStrategies;
+    public ?array $opponentStrategies = null;
 }
