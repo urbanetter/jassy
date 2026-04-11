@@ -10,5 +10,5 @@ class Deal implements Message
     /**
      * @var Card[]
      */
-    public $cards;
+    public array $cards;
 }

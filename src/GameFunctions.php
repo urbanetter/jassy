@@ -30,9 +30,7 @@ function isReady(Game $game) : bool
         $game->players
         && count($game->players) == Game::NUMBER_OF_PLAYERS
         && $game->players[3] instanceof Player
-        && $game->style
         && $game->style instanceof Style
-        && $game->currentPlayer
         && $game->currentPlayer instanceof Player
     ;
 }
@@ -41,7 +39,7 @@ function isReady(Game $game) : bool
  * @param Game $game
  * @return string[] team names
  */
-function teams(Game $game)
+function teams(Game $game): array
 {
     return [$game->players[0]->team, $game->players[1]->team];
 }
@@ -56,7 +54,7 @@ function teamMatched(string $team, Game $game) : bool
         return winner($trick, $game->style->orderFunction())->team == $team;
     });
 
-    return count($tricksWon) == Game::NUMBER_OF_CARDS;
+    return count($tricksWon) === count($game->playedTricks);
 }
 
 function teamWonLastTrick(string $team, Game $game) : bool
@@ -96,7 +94,7 @@ function teamPoints(string $team, Game $game) : int
  * @param Game $game
  * @return Card[]
  */
-function startingHand(Game $game)
+function startingHand(Game $game): array
 {
     $player = $game->currentPlayer;
     return array_reduce($game->playedTricks, function($cards, Trick $trick) use ($player) {
@@ -119,7 +117,7 @@ function teamMate(Game $game, Player $player) : ?Player
     return null;
 }
 
-function playCard(Game $game, $card) : Game
+function playCard(Game $game, Card|string $card) : Game
 {
     if (is_string($card)) {
         $card = Card::shortcut($card);

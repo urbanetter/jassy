@@ -5,35 +5,26 @@ namespace Jass\Entity;
 
 class Player
 {
-    /**
-     * @var string
-     */
-    public $name;
+    public string $name;
 
     /**
      * @var Card[]
      */
-    public $hand;
+    public ?array $hand = null;
 
-    /**
-     * @var string
-     */
-    public $team;
+    public ?string $team = null;
 
     /**
      * @var string[]
      */
-    public $strategies;
+    public ?array $strategies = null;
 
-    /**
-     * @param string $name
-     */
-    public function __construct($name = 'Ueli')
+    public function __construct(string $name = 'Ueli')
     {
         $this->name = $name;
     }
 
-    public function __toString()
+    public function __toString() : string
     {
         return $this->name;
     }

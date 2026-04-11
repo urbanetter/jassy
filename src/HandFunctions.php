@@ -4,28 +4,27 @@ namespace Jass\Hand;
 
 
 use Jass\Entity\Card;
+use Jass\Entity\Card\Suit;
 use LogicException;
 
 /**
  * @param Card[] $hand
- * @param string $suit
+ * @param Suit $suit
  * @return Card[]
  */
-function suit(array $hand, string $suit) : array
+function suit(array $hand, Suit $suit) : array
 {
-    return array_filter($hand, function(Card $card) use ($suit){
-        return $card->suit == $suit;
-    });
+    return array_filter($hand, fn (Card $card) => $card->suit === $suit);
 }
 
 /**
  * @param Card[] $hand
- * @param string $suit
+ * @param Suit $suit
  * @return bool
  */
-function canFollowSuit(array $hand, string $suit) : bool
+function canFollowSuit(array $hand, Suit $suit) : bool
 {
-    return count(suit($hand, $suit)) > 0;
+    return array_any($hand, fn (Card $card) => $card->suit === $suit);
 }
 
 /**
@@ -83,25 +82,26 @@ function ordered(array $hand, Callable $orderFunction) : array
 
 function first($array)
 {
-    return ($array && is_array($array)) ? array_slice($array, 0, 1)[0] : null;
+    return is_array($array) ? array_first($array) : null;
 }
 
 function last($array)
 {
-    return ($array && is_array($array)) ? array_slice($array, -1)[0] : null;
+    return is_array($array) ? array_last($array) : null;
 }
 
 /**
  * @param Card[] $hand
- * @return string[]
+ * @return Suit[]
  */
 function suits(array $hand) : array
 {
-    $suits = array_map(function (Card $card) {
-        return $card->suit;
-    }, $hand);
+    $suits = [];
+    foreach ($hand as $card) {
+        $suits[$card->suit->name] = $card->suit;
+    }
 
-    return array_unique($suits);
+    return array_values($suits);
 }
 
 /**
@@ -113,7 +113,7 @@ function playCardOfHand(array $hand, Card $played) : array
 {
     $result = [];
     foreach ($hand as $card) {
-        if ((string) $card != (string) $played) {
+        if ((string) $card !== (string) $played) {
             $result[] = $card;
         }
     }

@@ -26,41 +26,32 @@ function bySuitsAndValues(array $suits, array $values) : array
     $cards = [];
     foreach ($suits as $suit) {
         foreach ($values as $value) {
-            $card = new Card();
-            $card->suit = $suit;
-            $card->value = $value;
-
-            $cards[] = $card;
+            $cards[] = Card::from($suit, $value);
         }
     }
 
     return $cards;
 }
 
-/** @return string[] */
+/** @return Suit[] */
 function suits() : array
 {
-    return [Suit::ROSE, Suit::BELL, Suit::OAK, Suit::SHIELD];
+    return Suit::cases();
 }
 
 /**
- * @param string $suit
+ * @param Suit $suit
  * @return Card[]
  */
-function bySuit(string $suit) : array
+function bySuit(Suit $suit) : array
 {
     return bySuitsAndValues([$suit], values());
 }
 
-/** @return string[] */
+/** @return Value[] */
 function values() : array
 {
-    return [Value::SIX, Value::SEVEN, Value::EIGHT, Value::NINE, Value::TEN, Value::JACK, Value::QUEEN, Value::KING, Value::ACE];
-}
-
-function isValidCard(Card $card) : bool
-{
-    return (in_array($card->suit, suits()) && in_array($card->value, values()));
+    return Value::cases();
 }
 
 /**
@@ -69,11 +60,8 @@ function isValidCard(Card $card) : bool
  */
 function byShortcuts(string $string) : array
 {
-    $cards = explode(",", $string);
-    $result = [];
-    foreach ($cards as $card) {
-        $result[] = Card::shortcut($card);
-
-    }
-    return $result;
+    return array_map(
+        fn (string $card) => Card::shortcut($card),
+        explode(",", $string),
+    );
 }

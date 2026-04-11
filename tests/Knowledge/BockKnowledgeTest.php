@@ -24,10 +24,10 @@ class BockKnowledgeTest extends TestCase
 
         $actual = BockKnowledge::analyze($game)->bockCards;
         $expected = [
-            Suit::SHIELD => Card::shortcut('sa'),
-            Suit::BELL => Card::shortcut('ba'),
-            Suit::OAK => Card::shortcut('oa'),
-            Suit::ROSE => Card::shortcut('ra'),
+            Suit::SHIELD->name => Card::shortcut('sa'),
+            Suit::BELL->name => Card::shortcut('ba'),
+            Suit::OAK->name => Card::shortcut('oa'),
+            Suit::ROSE->name => Card::shortcut('ra'),
         ];
         $this->assertCount(4, $actual);
         $this->assertEquals($expected, $actual);
@@ -39,7 +39,7 @@ class BockKnowledgeTest extends TestCase
         playCard($game, 'o8');
 
         $actual = BockKnowledge::analyze($game)->bockCards;
-        $this->assertEquals(Card::shortcut('sk'), $actual[Suit::SHIELD]);
+        $this->assertEquals(Card::shortcut('sk'), $actual[Suit::SHIELD->name]);
     }
 
     public function testSuitPotential()
@@ -57,9 +57,9 @@ class BockKnowledgeTest extends TestCase
         $actual = BockKnowledge::analyze($game)->suitPotential;
 
         $expected = [
-            Suit::SHIELD => 1,
-            Suit::BELL => 3,
-            Suit::OAK => 8,
+            Suit::SHIELD->name => 1,
+            Suit::BELL->name => 3,
+            Suit::OAK->name => 8,
         ];
 
         $this->assertEquals($expected, $actual);

@@ -30,7 +30,7 @@ class CardSetTest extends TestCase
 
     public function testFailure()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(\ValueError::class);
         Card::shortcut('wrong');
     }
 
@@ -39,5 +39,12 @@ class CardSetTest extends TestCase
         $shortcut = 'rj';
         $card = Card::shortcut($shortcut);
         $this->assertEquals($shortcut, $card->toShortcut());
+    }
+
+    public function testToString()
+    {
+        $card =  Card::from(Card\Suit::BELL, Card\Value::ACE);
+        $actual = (string) $card;
+        $this->assertEquals('bell ace', $actual);
     }
 }
