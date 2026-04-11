@@ -70,7 +70,7 @@ class TrumpKnowledge implements Knowledge
 
         $knowledge->possibleMatch = true;
         foreach ($game->playedTricks as $trick) {
-            if (winner($trick, $game->style->orderFunction())->team != $player->team) {
+            if (winner($trick, $game->style)->team != $player->team) {
                 $knowledge->possibleMatch = false;
             }
         }

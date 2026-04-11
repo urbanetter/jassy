@@ -51,7 +51,7 @@ function teamMatched(string $team, Game $game) : bool
     }
 
     $tricksWon = array_filter($game->playedTricks, function(Trick $trick) use ($team, $game) {
-        return winner($trick, $game->style->orderFunction())->team == $team;
+        return winner($trick, $game->style)->team == $team;
     });
 
     return count($tricksWon) === count($game->playedTricks);
@@ -65,14 +65,14 @@ function teamWonLastTrick(string $team, Game $game) : bool
 
     /** @var Trick $lastTrick */
     $lastTrick = last($game->playedTricks);
-    return winner($lastTrick, $game->style->orderFunction())->team == $team;
+    return winner($lastTrick, $game->style)->team == $team;
 }
 
 function teamPoints(string $team, Game $game) : int
 {
     $points = array_reduce($game->playedTricks, function($sum, Trick $trick) use ($game, $team) {
-        if (winner($trick, $game->style->orderFunction())->team == $team) {
-            $sum += points($trick, $game->style->pointFunction());
+        if (winner($trick, $game->style)->team == $team) {
+            $sum += points($trick, $game->style);
         }
         return $sum;
     }, 0);

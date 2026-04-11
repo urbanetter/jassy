@@ -141,7 +141,7 @@ class MessageHandler
 
         // check if trick is finished
         if (Trick\isFinished($trick)) {
-            $game->currentPlayer = Trick\winner($trick, $game->style->orderFunction());
+            $game->currentPlayer = Trick\winner($trick, $game->style);
             $game->playedTricks[] = $trick;
             $game->currentTrick = null;
         } else {

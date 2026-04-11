@@ -5,6 +5,7 @@ namespace Jass\Hand;
 
 use Jass\Entity\Card;
 use Jass\Entity\Card\Suit;
+use Jass\Style;
 use LogicException;
 
 /**
@@ -29,13 +30,13 @@ function canFollowSuit(array $hand, Suit $suit) : bool
 
 /**
  * @param Card[] $hand
- * @param Callable $orderFunction
+ * @param Style $style
  * @return Card
  */
-function lowest(array $hand, Callable $orderFunction) : Card
+function lowest(array $hand, Style $style) : Card
 {
-    return array_reduce($hand, function($lowest, $card) use ($orderFunction) {
-        if (!$lowest || $orderFunction($card) < $orderFunction($lowest)) {
+    return array_reduce($hand, function($lowest, $card) use ($style) {
+        if (!$lowest || $style->orderValue($card) < $style->orderValue($lowest)) {
             return $card;
         } else {
             return $lowest;
@@ -45,13 +46,13 @@ function lowest(array $hand, Callable $orderFunction) : Card
 
 /**
  * @param Card[] $hand
- * @param Callable $orderFunction
+ * @param Style $style
  * @return Card
  */
-function highest(array $hand, Callable $orderFunction) : Card
+function highest(array $hand, Style $style) : Card
 {
-    return array_reduce($hand, function($highest, $card) use ($orderFunction) {
-        if (!$highest || $orderFunction($card) > $orderFunction($highest)) {
+    return array_reduce($hand, function($highest, $card) use ($style) {
+        if (!$highest || $style->orderValue($card) > $style->orderValue($highest)) {
             return $card;
         } else {
             return $highest;
@@ -61,17 +62,17 @@ function highest(array $hand, Callable $orderFunction) : Card
 
 /**
  * @param Card[] $hand
- * @param Callable $orderFunction
+ * @param Style $style
  * @return Card[]
  */
-function ordered(array $hand, Callable $orderFunction) : array
+function ordered(array $hand, Style $style) : array
 {
     $suits = suits($hand);
     $result = [];
     foreach ($suits as $suit) {
         $cards = suit($hand, $suit);
-        usort($cards, function ($a, $b) use ($orderFunction) {
-            return $orderFunction($a) <=> $orderFunction($b);
+        usort($cards, function ($a, $b) use ($style) {
+            return $style->orderValue($a) <=> $style->orderValue($b);
         });
         $result = array_merge($result, $cards);
     }

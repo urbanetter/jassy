@@ -14,17 +14,7 @@ abstract class Style
 
     abstract public function orderValue(Card $card, ?Suit $leadingSuit = null) : int;
 
-    public function orderFunction(): callable
-    {
-        return $this->orderValue(...);
-    }
-
     abstract public function points(Card $card) : int;
-
-    public function pointFunction(): callable
-    {
-        return $this->points(...);
-    }
 
     /**
      * @param Card[] $hand
