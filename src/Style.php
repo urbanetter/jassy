@@ -16,14 +16,14 @@ abstract class Style
 
     public function orderFunction(): callable
     {
-        return [$this, "orderValue"];
+        return $this->orderValue(...);
     }
 
     abstract public function points(Card $card) : int;
 
     public function pointFunction(): callable
     {
-        return [$this, "points"];
+        return $this->points(...);
     }
 
     /**

@@ -4,6 +4,7 @@ namespace Jass\Style;
 
 use Jass\Entity\Card;
 use Jass\Entity\Card\Suit;
+use Jass\Entity\Card\Value;
 use Jass\Entity\Trick;
 
 class Trump extends TopDown
@@ -36,9 +37,9 @@ class Trump extends TopDown
     public function orderValue(Card $card, ?Suit $leadingSuit = null) : int
     {
         if ($card->suit === $this->trumpSuit) {
-            $result = $card->value->trumpRank();
+            $result = (int) array_search($card->value, $this->trumpOrder(), true);
         } else {
-            $result = $card->value->topDownRank();
+            $result = (int) array_search($card->value, $this->order(), true);
         }
 
         // increase value if its the same suit like leading turn
@@ -58,9 +59,24 @@ class Trump extends TopDown
     #[\Override]
     public function points(Card $card) : int
     {
-        return $this->trumpSuit === $card->suit
-            ? $card->value->trumpPoints()
-            : $card->value->topDownPoints();
+        if ($this->trumpSuit === $card->suit) {
+            return match ($card->value) {
+                Value::JACK => 20,
+                Value::NINE => 14,
+                Value::TEN => 10,
+                Value::QUEEN => 3,
+                Value::KING => 4,
+                Value::ACE => 11,
+                default => 0,
+            };
+        }
+
+        return parent::points($card);
+    }
+
+    private function trumpOrder(): array
+    {
+        return [Value::SIX, Value::SEVEN, Value::EIGHT, Value::TEN, Value::QUEEN, Value::KING, Value::ACE, Value::NINE, Value::JACK];
     }
 
     #[\Override]

@@ -18,7 +18,7 @@ class TopDown extends Style
     #[\Override]
     public function orderValue(Card $card, ?Suit $leadingSuit = null) : int
     {
-        $result = $card->value->topDownRank();
+        $result = (int) array_search($card->value, $this->order(), true);
 
         // increase order if its the same suit like leading turn
         if ($leadingSuit === $card->suit) {
@@ -35,7 +35,15 @@ class TopDown extends Style
     #[\Override]
     public function points(Card $card) : int
     {
-        return $card->value->topDownPoints();
+        return match ($card->value) {
+            Value::EIGHT => 8,
+            Value::TEN => 10,
+            Value::JACK => 2,
+            Value::QUEEN => 3,
+            Value::KING => 4,
+            Value::ACE => 11,
+            default => 0,
+        };
     }
 
     #[\Override]
