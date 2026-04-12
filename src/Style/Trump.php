@@ -33,7 +33,6 @@ class Trump extends TopDown
         $this->trumpSuit = $data['trumpSuit'] instanceof Suit ? $data['trumpSuit'] : Suit::fromLabel($data['trumpSuit']);
     }
 
-    #[\Override]
     public function orderValue(Card $card, ?Suit $leadingSuit = null) : int
     {
         if ($card->suit === $this->trumpSuit) {
@@ -56,7 +55,6 @@ class Trump extends TopDown
 
     }
 
-    #[\Override]
     public function points(Card $card) : int
     {
         if ($this->trumpSuit === $card->suit) {
@@ -79,7 +77,6 @@ class Trump extends TopDown
         return [Value::SIX, Value::SEVEN, Value::EIGHT, Value::TEN, Value::QUEEN, Value::KING, Value::ACE, Value::NINE, Value::JACK];
     }
 
-    #[\Override]
     public function isValidCard(Trick $trick, array $hand, Card $card) : bool
     {
         if (in_array($card, $hand) && $card->suit === $this->trumpSuit) {

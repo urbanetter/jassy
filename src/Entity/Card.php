@@ -5,23 +5,23 @@ namespace Jass\Entity;
 use Jass\Entity\Card\Suit;
 use Jass\Entity\Card\Value;
 
-readonly class Card
+class Card
 {
     public function __construct(
-        public Suit $suit,
-        public Value $value,
-        public ?string $hint = null,
+        public readonly Suit $suit,
+        public readonly Value $value,
+        public readonly ?string $hint = null,
     ) {
     }
 
     public function withHint(string $hint) : Card
     {
-        return clone($this, ['hint' => $hint]);
+        return new Card($this->suit, $this->value, $hint);
     }
 
     public function withoutHint() : Card
     {
-        return clone($this, ['hint' => null]);
+        return new Card($this->suit, $this->value);
     }
 
     public function __toString() : string

@@ -36,12 +36,22 @@ function winningTurn(Trick $trick, Style $style) : Turn
 
 function playerTurn(Trick $trick, Player $player) : ?Turn
 {
-    return array_find($trick->turns, fn (Turn $turn) => $turn->player === $player);
+    foreach ($trick->turns as $turn) {
+        if ($turn->player === $player) {
+            return $turn;
+        }
+    }
+
+    return null;
 }
 
 function leadingTurn(Trick $trick) : ?Turn
 {
-    return array_first($trick->turns);
+    foreach ($trick->turns as $turn) {
+        return $turn;
+    }
+
+    return null;
 }
 
 /**

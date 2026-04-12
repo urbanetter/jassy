@@ -12,9 +12,11 @@ class SnapshotPlayer
     /** @var string[] */
     private array $hand = [];
 
-    public function __construct(
-        private readonly string $name,
-    ) {
+    private string $name;
+
+    public function __construct(string $name)
+    {
+        $this->name = $name;
     }
 
     public function teamMate(string $name) : self

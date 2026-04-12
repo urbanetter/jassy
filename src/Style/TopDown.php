@@ -15,7 +15,6 @@ class TopDown extends Style
 
     public string $name = "top down";
 
-    #[\Override]
     public function orderValue(Card $card, ?Suit $leadingSuit = null) : int
     {
         $result = (int) array_search($card->value, $this->order(), true);
@@ -32,7 +31,6 @@ class TopDown extends Style
         return [Value::SIX, Value::SEVEN, Value::EIGHT, Value::NINE, Value::TEN, Value::JACK, Value::QUEEN, Value::KING, Value::ACE];
     }
 
-    #[\Override]
     public function points(Card $card) : int
     {
         return match ($card->value) {
@@ -46,7 +44,6 @@ class TopDown extends Style
         };
     }
 
-    #[\Override]
     public function isValidCard(Trick $trick, array $hand, Card $card) : bool
     {
         if (!in_array($card, $hand)) {

@@ -36,6 +36,6 @@
         "analyse": "psalm --threads=1 --no-cache"
     },
     "require": {
-        "php": "^8.5"
+        "php": "^8.1"
     }
 }

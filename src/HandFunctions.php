@@ -25,7 +25,13 @@ function suit(array $hand, Suit $suit) : array
  */
 function canFollowSuit(array $hand, Suit $suit) : bool
 {
-    return array_any($hand, fn (Card $card) => $card->suit === $suit);
+    foreach ($hand as $card) {
+        if ($card->suit === $suit) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 /**
@@ -83,12 +89,29 @@ function ordered(array $hand, Style $style) : array
 
 function first($array)
 {
-    return is_array($array) ? array_first($array) : null;
+    if (!is_array($array)) {
+        return null;
+    }
+
+    foreach ($array as $value) {
+        return $value;
+    }
+
+    return null;
 }
 
 function last($array)
 {
-    return is_array($array) ? array_last($array) : null;
+    if (!is_array($array)) {
+        return null;
+    }
+
+    $last = null;
+    foreach ($array as $value) {
+        $last = $value;
+    }
+
+    return $last;
 }
 
 /**
