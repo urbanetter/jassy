@@ -3,31 +3,27 @@
 namespace Tests\Strategy;
 
 
-use function Jass\CardSet\byShortcuts;
-use Jass\Entity\Card;
-use function Jass\Game\playCard;
-use function Jass\Game\testGame;
-use function Jass\Strategy\card;
+use Jass\Strategy\Simple;
+use Tests\Support\TestScenario;
 use PHPUnit\Framework\TestCase;
 
 class SimpleTest extends TestCase
 {
-    public function testSimpleStrategy()
+    public function testSimpleStrategy(): void
     {
-        $game = testGame([
-            byShortcuts('sa,sq,r6,r7'),
-            byShortcuts('ra,rk,s6,s7'),
-            byShortcuts('r8,r9'),
-        ]);
+        $scenario = TestScenario::topDown()
+            ->hand('Ueli', 'sa,sq,r6,r7')
+            ->hand('Fritz', 'ra,rk,s6,s7')
+            ->hand('Franz', 'r8,r9');
 
-        $this->assertEquals(Card::shortcut('sa'), card($game)->withoutHint());
+        $this->assertSame('sa', $scenario->chooseShortcut(Simple::class));
 
-        playCard($game, Card::shortcut('r6'));
+        $scenario->play('r6');
 
-        $this->assertEquals(Card::shortcut('ra'),card($game)->withoutHint());
+        $this->assertSame('ra', $scenario->chooseShortcut(Simple::class));
 
-        playCard($game, Card::shortcut('ra'));
+        $scenario->play('ra');
 
-        $this->assertEquals(Card::shortcut('r8'), card($game)->withoutHint());
+        $this->assertSame('r8', $scenario->chooseShortcut(Simple::class));
     }
 }

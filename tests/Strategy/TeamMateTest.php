@@ -3,91 +3,81 @@
 namespace Tests\Strategy;
 
 
-use function Jass\CardSet\byShortcuts;
-use function Jass\CardSet\bySuit;
-use Jass\Entity\Card;
 use Jass\Entity\Card\Suit;
-use function Jass\Game\playCard;
-use function Jass\Game\testGame;
 use Jass\Strategy\TeamMate;
 use PHPUnit\Framework\TestCase;
+use Tests\Support\TestScenario;
 
 class TeamMateTest extends TestCase
 {
-    public function testTeamOnly()
+    public function testTeamOnly(): void
     {
-        $game = testGame([
-            byShortcuts('sa,s6,b6,b7,b8,b9,b10,bj,bq'),
-            bySuit(Suit::OAK),
-            byShortcuts('ba,bk,s7,s8,s9,s10,sj,sq,sk'),
-            bySuit(Suit::ROSE)
-        ]);
+        $scenario = TestScenario::topDown()
+            ->hand('Ueli', 'sa,s6,b6,b7,b8,b9,b10,bj,bq')
+            ->hand('Fritz', 'o6,o7,o8,o9,o10,oj,oq,ok,oa')
+            ->hand('Franz', 'ba,bk,s7,s8,s9,s10,sj,sq,sk')
+            ->hand('Hans', 'r6,r7,r8,r9,r10,rj,rq,rk,ra');
 
-        $game = playCard($game, 'sa');
-        $game = playCard($game, 'o6');
-        $game = playCard($game, 's7');
-        $game = playCard($game, 'r6');
+        $scenario
+            ->play('sa')
+            ->play('o6')
+            ->play('s7')
+            ->play('r6');
 
-        $sut = new TeamMate();
-        $actual = $sut->chooseCard($game)->withoutHint();
-        $this->assertEquals(Card::shortcut('s6'), $actual);
+        $this->assertSame('s6', $scenario->chooseShortcut(TeamMate::class));
 
     }
 
-    public function testGoodSuit()
+    public function testGoodSuit(): void
     {
-        $sut = new TeamMate();
+        $scenario = TestScenario::topDown()
+            ->hand('Ueli', 'sk,sq,sj,s10,s9,b6,b7,b8,b9')
+            ->hand('Fritz', 's6')
+            ->hand('Franz', 'ra,rk,rq,rj,o6,o7,o8,s7,sa')
+            ->hand('Hans', 's8');
 
-        $game = testGame([
-            byShortcuts('sk,sq,sj,s10,s9,b6,b7,b8,b9'),
-            byShortcuts('s6'),
-            byShortcuts('ra,rk,rq,rj,o6,o7,o8,s7,sa'),
-            byShortcuts('s8')
-        ]);
+        $this->assertSame('s9', $scenario->chooseShortcut(TeamMate::class));
 
-        $firstCard = $sut->chooseCard($game)->withoutHint();
-        $this->assertEquals(Card::shortcut('s9'), $firstCard);
+        $scenario
+            ->play('s10')
+            ->play('s6')
+            ->play('sa')
+            ->play('s8');
 
-        $game = playCard($game, 's10');
-        $game = playCard($game, 's6');
-        $game = playCard($game, 'sa');
-        $game = playCard($game, 's8');
-
-        $givingBackCard = $sut->chooseCard($game)->withoutHint();
-        $this->assertEquals(Card::shortcut('s7'), $givingBackCard);
+        $this->assertSame('s7', $scenario->chooseShortcut(TeamMate::class));
     }
 
-    public function testBadSuits()
+    public function testBadSuits(): void
     {
-        $game = testGame([
-            byShortcuts('sa,ba,sq,sj,s10,oj,b6,b7,r6'),
-            byShortcuts('s6,bk'),
-            byShortcuts('ra,rk,rq,rj,o6,o7,o8,o9,o10'),
-            byShortcuts('s7,bq')
-        ]);
-        $sut = new TeamMate();
+        $scenario = TestScenario::topDown()
+            ->hand('Ueli', 'sa,ba,sq,sj,s10,oj,b6,b7,r6')
+            ->hand('Fritz', 's6,bk,r7,r8')
+            ->hand('Franz', 'ra,rk,rq,rj,o6,o7,o8,o9,o10')
+            ->hand('Hans', 's7,bq');
 
+        $scenario
+            ->play('sa')
+            ->play('s6');
 
-        $game = playCard($game, 'sa');
-        $game = playCard($game, 's6');
-
-        $actual = $sut->chooseCard($game)->withoutHint();
+        $actual = $scenario->choose(TeamMate::class);
         $this->assertEquals(Suit::OAK, $actual->suit); // toss away oak
 
-        $game = playCard($game, 'o6');
-        $game = playCard($game, 's7');
+        $scenario
+            ->play('o6')
+            ->play('s7');
 
-        $game = playCard($game, 'ba');
-        $game = playCard($game, 'bk');
+        $scenario
+            ->play('ba')
+            ->play('bk');
 
-        $actual = $sut->chooseCard($game)->withoutHint();
+        $actual = $scenario->choose(TeamMate::class);
         $this->assertEquals(Suit::OAK, $actual->suit); // toss away oak
 
-        $game = playCard($game, 'o7');
-        $game = playCard($game, 'bq');
+        $scenario
+            ->play('o7')
+            ->play('bq');
 
-        $sut = new TeamMate();
-        $actual = $sut->chooseCard($game)->withoutHint();
+        $actual = $scenario->choose(TeamMate::class);
 
         // player 1 now knows team mate does not have shield and bell
         // since oak is tossed away player 1 should play suit rose
