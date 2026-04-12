@@ -3,84 +3,65 @@
 namespace Tests\Strategy;
 
 
-use function Jass\CardSet\byShortcuts;
-use Jass\Entity\Card;
 use Jass\Entity\Card\Suit;
-use function Jass\Game\playCard;
-use function Jass\Game\testGame;
 use Jass\Strategy\Bock;
 use Jass\Strategy\Simple;
-use Jass\Style\Trump;
+use Jass\Strategy\Trump;
 use PHPUnit\Framework\TestCase;
+use Tests\Support\TestScenario;
 
 class TrumpStrategyTest extends TestCase
 {
-    public function testTrump()
+    public function testTrump(): void
     {
-        $game = testGame(
-            [
-                byShortcuts('rj,r9,ra,ba,bk,o6,o7,o8,s6'),
-                byShortcuts('rq,r10,oa,ok,o9,s7,s8,s9,s10'),
-                byShortcuts('r6,r7,r8,oq,oj,sa,sj,b6,b7'),
-                [] // all the other cards
-            ],
-            new Trump(Suit::ROSE)
-        );
+        $scenario = TestScenario::trump(Suit::ROSE)
+            ->hand('Ueli', 'rj,r9,ra,ba,bk,o6,o7,o8,s6')
+            ->hand('Fritz', 'rq,r10,oa,ok,o9,s7,s8,s9,s10')
+            ->hand('Franz', 'r6,r7,r8,oq,oj,sa,sj,b6,b7')
+            ->hand('Hans', 'b8,b9,b10,bj,bq,rk,sq,sk,o10');
 
-        $strategy = new \Jass\Strategy\Trump();
-        $simple = new Simple();
-        $bock = new Bock();
+        $this->assertSame('rj', $scenario->chooseShortcut(Trump::class));
+        $scenario
+            ->play('rj')
+            ->play('r10')
+            ->play('r6')
+            ->play($scenario->choose(Simple::class));
 
-        $this->assertEquals($strategy->chooseCard($game)->withoutHint(), Card::shortcut('rj'));
-        playCard($game, 'rj');
-        playCard($game, 'r10');
-        playCard($game, 'r6');
-        playCard($game, $simple->chooseCard($game)->withoutHint());
+        $this->assertSame('r9', $scenario->chooseShortcut(Trump::class));
+        $scenario
+            ->play('r9')
+            ->play('rq')
+            ->play('r7')
+            ->play($scenario->choose(Simple::class));
 
-        $this->assertEquals($strategy->chooseCard($game)->withoutHint(), Card::shortcut('r9'));
-        playCard($game, 'r9');
-        playCard($game, 'rq');
-        playCard($game, 'r7');
-        playCard($game, $simple->chooseCard($game)->withoutHint());
-
-        $this->assertNull($strategy->chooseCard($game));
-        $this->assertNotEquals(Card::shortcut('ra'), $bock->chooseCard($game)->withoutHint());
+        $this->assertNull($scenario->choose(Trump::class));
+        $this->assertNotSame('ra', $scenario->chooseShortcut(Bock::class));
 
     }
 
-    public function testOvertrumpsIfLowerThanAceOnFirstTrick()
+    public function testOvertrumpsIfLowerThanAceOnFirstTrick(): void
     {
-        $game = testGame(
-            [
-                byShortcuts('sa,r7,r8,rk,oj,sa,sj,b6,b7'),
-                byShortcuts('oq,o10,oa,ok,o9,s7,s8,s9,s10'),
-                byShortcuts('rj,r9,ra,ba,bk,o6,o7,o8,s6'),
-                [] // all the other cards
-            ],
-            new Trump(Suit::ROSE)
-        );
+        $scenario = TestScenario::trump(Suit::ROSE)
+            ->hand('Ueli', 'sa,r7,r8,rk,oj,sj,b6,b7')
+            ->hand('Fritz', 'oq,o10,oa,ok,o9,s7,s8,s9,s10')
+            ->hand('Franz', 'rj,r9,ra,ba,bk,o6,o7,o8,s6');
 
-        $strategy = new \Jass\Strategy\Trump();
+        $this->assertSame('rk', $scenario->chooseShortcut(Trump::class));
+        $scenario
+            ->play('rk')
+            ->play('s7');
+        $this->assertSame('rj', $scenario->chooseShortcut(Trump::class));
 
-        $this->assertEquals($strategy->chooseCard($game)->withoutHint(), Card::shortcut("rk"));
-        playCard($game, 'rk');
-        playCard($game, 's7');
-        $this->assertEquals($strategy->chooseCard($game)->withoutHint(), Card::shortcut("rj"));
+        $scenario = TestScenario::trump(Suit::ROSE)
+            ->hand('Ueli', 'ra,r7,r8,rk,oj,sa,sj,b6,b7')
+            ->hand('Fritz', 'oq,o10,oa,ok,o9,s7,s8,s9,s10')
+            ->hand('Franz', 'rj,r9,sa,ba,bk,o6,o7,o8,s6');
 
-        $game = testGame(
-            [
-                byShortcuts('ra,r7,r8,rk,oj,sa,sj,b6,b7'),
-                byShortcuts('oq,o10,oa,ok,o9,s7,s8,s9,s10'),
-                byShortcuts('rj,r9,sa,ba,bk,o6,o7,o8,s6'),
-                [] // all the other cards
-            ],
-            new Trump(Suit::ROSE)
-        );
-
-        $this->assertEquals($strategy->chooseCard($game)->withoutHint(), Card::shortcut("ra"));
-        playCard($game, 'ra');
-        playCard($game, 's7');
-        $this->assertNull($strategy->chooseCard($game));
+        $this->assertSame('ra', $scenario->chooseShortcut(Trump::class));
+        $scenario
+            ->play('ra')
+            ->play('s7');
+        $this->assertNull($scenario->choose(Trump::class));
 
     }
 }
