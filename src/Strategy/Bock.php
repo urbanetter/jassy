@@ -12,6 +12,11 @@ use Jass\Strategy;
 
 class Bock implements Strategy
 {
+    public static function name() : string
+    {
+        return 'bock';
+    }
+
     public function chooseCard(Game $game): ?Card
     {
         $trick = TrickKnowledge::analyze($game);

@@ -11,6 +11,11 @@ use Jass\Hand;
 
 class Simple implements Strategy
 {
+    public static function name() : string
+    {
+        return 'simple';
+    }
+
     public function chooseCard(Game $game): ?Card
     {
         $trick = TrickKnowledge::analyze($game);
