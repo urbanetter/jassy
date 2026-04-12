@@ -16,12 +16,12 @@ readonly class Card
 
     public function withHint(string $hint) : Card
     {
-        return clone($this, ['hint' => $hint]);
+        return new Card($this->suit, $this->value, $hint);
     }
 
     public function withoutHint() : Card
     {
-        return clone($this, ['hint' => null]);
+        return new Card($this->suit, $this->value);
     }
 
     public function __toString() : string
