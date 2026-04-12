@@ -19,6 +19,10 @@ use Jass\Strategy;
 
 class TeamMate implements Strategy
 {
+    public static function name() : string
+    {
+        return 'team mate';
+    }
 
     public function chooseCard(Game $game): ?Card
     {

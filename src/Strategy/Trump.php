@@ -15,6 +15,10 @@ use Jass\Strategy;
 
 class Trump implements Strategy
 {
+    public static function name() : string
+    {
+        return 'trump';
+    }
 
     public function chooseCard(Game $game): ?Card
     {
